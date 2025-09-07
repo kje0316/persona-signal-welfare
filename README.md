@@ -48,10 +48,14 @@
 ```bash
 persona-signal-welfare/
 ├── .github/              # GitHub 관련 설정 (PR 템플릿, CODEOWNERS 등)
+│   └── workflows/ci.yml  # CI/CD 설정
 ├── .gitignore            # Git 추적 제외 파일 설정
+├── .env.example          # 환경 변수 샘플
 ├── README.md             # 프로젝트 설명 (현재 파일)
 ├── docs/                 # 프로젝트 관련 문서 (회의록, 설계도, 다이어그램 등)
 ├── requirements.txt      # Python 패키지 의존성 목록
+├── Dockerfile            # 전체 백엔드(FastAPI + AI 모듈) 컨테이너 빌드용
+├── docker-compose.yml    # 전체 서비스 실행
 ├── src/                  # 소스 코드 루트
 │   ├── backend/          # 백엔드 API (FastAPI)
 │   ├── frontend/         # 프론트엔드 (React/Vue)
@@ -62,4 +66,7 @@ persona-signal-welfare/
 │   ├── core/             # 공통 유틸리티
 │   ├── config/           # 환경 설정
 │   └── data/             # 데이터셋 및 DB 파일
+│       ├── raw/
+│       ├── processed/
+│       └── synthetic/
 └── tests/                # 테스트 코드
