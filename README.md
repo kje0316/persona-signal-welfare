@@ -4,7 +4,7 @@
 [![FastAPI](https://img.shields.io/badge/Framework-FastAPI-teal)](https://fastapi.tiangolo.com/)
 [![RAG AI](https://img.shields.io/badge/Core%20Tech-RAG%20AI-blueviolet)](https://research.ibm.com/blog/retrieval-augmented-generation-RAG)
 ![Last Update](https://img.shields.io/github/last-commit/[Your-GitHub-ID]/persona-signal-welfare) 
-> **2025 서울 AI 해커톤** 출품작으로, 데이터로 복지 사각지대를 밝히고, AI로 사람을 먼저 찾아가는 기술을 제안합니다.
+> **2025 서울 AI 해커톤(https://mediahub.seoul.go.kr/gongmo/2000665)** 출품작으로, 데이터로 복지 사각지대를 밝히고, AI로 사람을 먼저 찾아가는 기술을 제안합니다.
 
 ---
 
