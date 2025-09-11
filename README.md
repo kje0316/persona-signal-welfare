@@ -51,23 +51,41 @@
 persona-signal-welfare/
 ├── .github/
 ├── docs/                 # 프로젝트 관련 문서 (회의록, 기획서, 설계도 등)
-├── requirements.txt
-├── README.md             # 프로젝트 설명 
+├── .gitignore
+├── README.md             # 프로젝트 설명 (최신 버전)
+├── requirements.txt      # 전체 프로젝트 Python 의존성
+├── Dockerfile            # 최종 서비스 빌드를 위한 Dockerfile
+├── docker-compose.yml    # 전체 서비스(백엔드, 프론트엔드) 실행
 └── src/                  # 소스 코드 루트
-    ├── backend/          # 백엔드 API (FastAPI)
-    │   ├── api/          # API 엔드포인트 라우터
-    │   ├── core/         # FastAPI 앱 설정, 미들웨어
-    │   └── services/     # 비즈니스 로직 (매칭, 추천 등)
-    ├── frontend/         # 프론트엔드 (React/Vue)
-    ├── ai_engine/        # 핵심 AI 엔진 (PersonaGen)
-    │   ├── assets/       # RAG 지식베이스, 페르소나 DB 등
-    │   ├── data_analysis/
-    │   ├── persona_generation/
-    │   └── self_reflection/
-    ├── common/             # 공통 유틸리티
-    ├── config/             # 환경 설정
-    └── data/               # 데이터셋
-        ├── raw/
-        ├── processed/
-        └── synthetic/
+    ├── backend/          # 최종 서비스를 제공하는 백엔드 API 서버 (FastAPI)
+    │   ├── api/          # API 엔드포인트 라우터 (예: /recommend, /chat)
+    │   └── main.py       # FastAPI 앱 실행 파일
+    │
+    ├── frontend/         # 사용자 인터페이스 (React/Vue)
+    │
+    ├── common/           # 여러 모듈에서 공통으로 사용하는 유틸리티 (예: 로거, DTO)
+    │
+    ├── data/             # 데이터셋
+    │   ├── raw/          # 원본 1인 가구 데이터
+    │   └── processed/    # 전처리된 데이터
+    │
+    └── modules/          # ⭐ 각 팀원이 담당하는 핵심 기능 모듈 (3개)
+        │
+        ├── 1_data_processing/  # 데이터 분석 
+        │   ├── eda.ipynb       # 원본 데이터 탐색 및 분석 노트북
+        │   ├── knowledge_base_builder.py # RAG 지식베이스 구축 스크립트
+        │   └── output/         # 분석 결과물 (그래프, 정제된 텍스트 등)
+        │
+        ├── 2_persona_engine/   # 페르소나 생성
+        │   ├── clustering.py   # 그룹화(유형 분류) 로직
+        │   ├── rag.py          # RAG 검색 로직
+        │   ├── generation.py   # 페르소나/가상 데이터 생성 로직
+        │   ├── reflection.py   # 자기반성 및 프롬프트 개선 로직
+        │   └── assets/         # 엔진이 사용하는 자산 (Vector DB, Persona DB 등)
+        │
+        └── 3_welfare_recommender/ # 서비스 매칭
+            ├── crawlers/       # 복지 정보 크롤링 스크립트
+            ├── db_builder.py   # 크롤링한 정보로 복지 서비스 DB 구축
+            ├── matching.py     # 페르소나와 복지 서비스를 매칭하는 로직
+            └── assets/         # 구축된 복지 서비스 DB (SQLite 등)
 
