@@ -71,7 +71,7 @@ persona-signal-welfare/
     │
     └── modules/          # 핵심 기능 모듈 
         │
-        ├── 1_data_analysis/      # 데이터 분석 담당
+        ├── data_analysis/      # 데이터 분석 
         │   ├── notebooks/        # 데이터 탐색 및 분석용 Jupyter Notebooks
         │   ├── main.py           # 전체 분석 파이프라인 실행 스크립트
         │   ├── eda.py            # 탐색적 데이터 분석 로직
@@ -79,14 +79,14 @@ persona-signal-welfare/
         │   ├── clustering.py     # 클러스터링(유형 분류) 로직
         │   └── output/           # 분석 결과물 (그래프, 분석 보고서.md 등)
         │
-        ├── 2_persona_engine/     # AI 엔진 개발 
+        ├── persona_engine/     # AI 엔진 개발 
         │   ├── knowledge_base/   # RAG가 참조할 지식 문서(.txt) 저장소
         │   ├── assets/           # 엔진이 생성/사용하는 자산 (Vector DB, Persona DB 등)
         │   ├── build_rag_db.py   # knowledge_base/의 문서를 Vector DB로 구축하는 스크립트
         │   ├── generation.py     # RAG, LLM을 활용한 페르소나/가상 데이터 생성 로직
         │   └── reflection.py     # 자기반성 및 프롬프트 개선 로직
         │
-        └── 3_welfare_recommender/ # 서비스 매칭 담당
+        └── welfare_recommender/ # 서비스 매칭 
             ├── assets/           # 구축된 복지 서비스 DB (SQLite 등)
             ├── crawlers/         # 복지 정보 크롤링 스크립트
             ├── db_builder.py     # 크롤링한 정보로 복지 서비스 DB를 구축하는 스크립트
