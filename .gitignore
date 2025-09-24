@@ -209,3 +209,31 @@ __marimo__/
 *.cluade
 .claude/
 CLAUDE.md
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+lerna-debug.log*
+
+# Next.js
+.next/
+out/
+
+# Deployment and guides
+deploy/
+DEPLOYMENT_GUIDE.md
+USAGE_GUIDE.md
+
+src/modules/data_analysis/risk_scoring/telecom_group_monthly_all.csv
+src/modules/data_analysis/risk_scoring/telecom_group_monthly_all_with_preds.csv
+src/modules/data_analysis/risk_scoring/artifacts/
+src/modules/data_analysis/risk_scoring/artifacts_step4_A/
+src/modules/data_analysis/risk_scoring/artifacts_step4_B/
+src/modules/data_analysis/risk_scoring/artifacts_tuned/
+src/modules/data_analysis/risk_scoring/artifacts_tuned_A/
+src/modules/data_analysis/risk_scoring/artifacts_tuned_B/
+# allow this large CSV (LFS)
+!src/modules/data_analysis/risk_scoring/telecom_group_monthly_all_with_preds.csv
