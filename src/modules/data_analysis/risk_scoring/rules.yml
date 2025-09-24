@@ -1,0 +1,62 @@
+# project/rules.yml 파일 최종 버전
+targets:
+  LIVELIHOOD:
+    cut: 0.65
+    signals:
+      # 연체 중심 축은 유지(가중치 약간 낮춤)
+      - {col: "최근 3개월 내 요금 연체 비율", direction: "high", weight: 0.45}
+      # 소비여력 저하: 금액/횟수 감소 + 변화 신호
+      - {col: "소액결재 사용금액", direction: "low", weight: 0.20}
+      - {col: "소액결재 사용금액 평균_std_delta3m", direction: "low", weight: 0.10}
+      # 고용 불안정(근무시간↓) + 추세 약화
+      - {col: "평균 근무시간 평균", direction: "low", weight: 0.15}
+      - {col: "평균 근무시간 평균_std_trend12m", direction: "low", weight: 0.10}
+  CARE:
+    gate:
+      - {col: "연령대", op: ">=", value: 65}
+    cut: 1.00
+    signals:
+      - {col: "평일 총 이동 거리 합계_pc", direction: "low", weight: 0.25}
+      - {col: "지하철이동일수 합계_pc", direction: "low", weight: 0.20}
+      - {col: "집 추정 위치 평일 총 체류시간_pc", direction: "high", weight: 0.15}
+  HEALTH_MENTAL_DELTA:
+    cut: 0.70
+    signals:
+      # '_std'를 추가하여 실제 생성된 피처 이름과 일치시킵니다.
+      - {col: "평일 총 이동 거리 합계_std_delta3m", direction: "high", weight: 0.4}
+      - {col: "집 추정 위치 평일 총 체류시간_std_delta3m", direction: "high", weight: 0.3}
+      - {col: "동영상/방송 서비스 사용일수_std_delta3m", direction: "high", weight: 0.3}
+
+  DAILY_LONGTERM:
+    cut: 0.65
+    signals:
+      # '_std'를 추가하여 실제 생성된 피처 이름과 일치시킵니다.
+      - {col: "평일 총 이동 거리 합계_std_trend12m", direction: "high", weight: 0.4}
+      - {col: "지하철이동일수 합계_std_trend12m", direction: "high", weight: 0.3}
+      - {col: "배달 서비스 사용일수_std_trend12m", direction: "high", weight: 0.3}
+  EMPLOYMENT:
+    cut: 0.65
+    signals:
+      - {col: "평균 근무시간 평균", direction: "high", weight: 0.7}
+      - {col: "지하철이동일수 합계_pc", direction: "high", weight: 0.3}
+  DEBT_LAW:
+    cut: 0.80
+    signals:
+      # 연체율 축은 더 강하게
+      - {col: "최근 3개월 내 요금 연체 비율", direction: "high", weight: 0.55}
+      # 금융/소비 활동 위축(레벨 + 변화)
+      - {col: "금융 서비스 사용일수", direction: "low", weight: 0.15}
+      - {col: "금융 서비스 사용일수_std_delta3m", direction: "low", weight: 0.10}
+      - {col: "소액결재 사용횟수 평균", direction: "low", weight: 0.10}
+      - {col: "소액결재 사용횟수 평균_std_delta3m", direction: "low", weight: 0.10}
+  ISOLATION:
+    cut: 0.68
+    signals:
+      - {col: "평균 통화대상자 수_pc", direction: "low", weight: 0.5}
+      - {col: "평일 총 이동 거리 합계_pc", direction: "low", weight: 0.3}
+      - {col: "집 추정 위치 평일 총 체류시간_pc", direction: "high", weight: 0.2}
+  HOUSING:
+    cut: 0.70
+    signals:
+      - {col: "주간상주지 변경횟수 평균", direction: "high", weight: 0.6}
+      - {col: "야간상주지 변경횟수 평균", direction: "high", weight: 0.4}
