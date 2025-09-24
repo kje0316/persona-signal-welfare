@@ -1,0 +1,39 @@
+# 범용 데이터 증강 시스템 requirements.txt
+
+# 웹 프레임워크
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+websockets==12.0
+
+# 데이터베이스
+sqlalchemy==2.0.23
+asyncpg==0.29.0
+psycopg2-binary==2.9.9
+alembic==1.12.1
+
+# AWS SDK
+boto3==1.29.0
+botocore==1.32.0
+
+# 데이터 처리 및 ML
+numpy==1.24.3
+pandas==2.0.3
+scikit-learn==1.3.0
+scipy==1.11.4
+matplotlib==3.7.2
+seaborn==0.12.2
+
+# 파일 처리
+openpyxl==3.1.2
+python-multipart==0.0.6
+aiofiles==23.2.1
+PyPDF2==3.0.1
+
+# 기타 유틸리티
+python-json-logger==2.0.7
+python-dateutil==2.8.2
+
+# 개발/테스트
+pytest==7.4.3
+httpx==0.25.2
