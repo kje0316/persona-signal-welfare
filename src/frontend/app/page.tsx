@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
-import { Search, MessageCircle, Home, Baby, Briefcase, Utensils, Heart, BookOpen, ArrowRight, Users, Calendar, DollarSign } from 'lucide-react'
+import { Search, MessageCircle, Home, Baby, Briefcase, Utensils, Heart, BookOpen, ArrowRight, Users, Calendar, DollarSign, Bot } from 'lucide-react'
 
 // 복지 서비스 데이터
 const welfareServices = [
@@ -367,8 +367,23 @@ export default function HomePage() {
         </CardContent>
       </Card>
 
+      {/* AI 데이터 증강 섹션 */}
+      <div className="text-center mt-16 p-8 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border-2 border-purple-200">
+        <h3 className="text-2xl font-bold text-gray-800 mb-4">🤖 AI 데이터 증강 시스템</h3>
+        <p className="text-gray-600 mb-6 text-lg">
+          복지 데이터를 AI 페르소나 기반으로 분석하고 증강하여 더 나은 서비스를 만들어보세요
+        </p>
+        <Link href="/augmentation">
+          <Button size="lg" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold px-8 py-4 rounded-full shadow-lg">
+            <Bot className="w-5 h-5 mr-2" />
+            데이터 증강 시작하기
+            <ArrowRight className="w-5 h-5 ml-2" />
+          </Button>
+        </Link>
+      </div>
+
       {/* 기존 페이지 연결 */}
-      <div className="text-center mt-16 p-8 bg-gray-50 rounded-lg">
+      <div className="text-center mt-8 p-8 bg-gray-50 rounded-lg">
         <h3 className="text-xl font-bold text-gray-800 mb-4">직접 검색하고 싶으시다면</h3>
         <p className="text-gray-600 mb-6">
           조건을 직접 선택하여 복지 서비스를 검색하거나, 단순 채팅 상담도 가능합니다.
