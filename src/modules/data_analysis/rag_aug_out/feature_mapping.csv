@@ -1,0 +1,475 @@
+﻿original,std_col,created,reason,type,base_std,derived,grouping
+총인구수,총인구수_std,True,robust_month_std,std,,,
+1인가구수,1인가구수_std,True,robust_month_std,std,,,
+야간상주지 변경 미추정 인구 수,야간상주지 변경 미추정 인구 수_std,True,robust_month_std,std,,,
+야간상주지 변경횟수 평균,야간상주지 변경횟수 평균_std,True,robust_month_std,std,,,
+"야간상주지 변경횟수: 4분위수, 25%","야간상주지 변경횟수: 4분위수, 25%_std",True,robust_month_std,std,,,
+"야간상주지 변경횟수: 4분위수, 50%","야간상주지 변경횟수: 4분위수, 50%_std",True,robust_month_std,std,,,
+"야간상주지 변경횟수: 4분위수, 75%","야간상주지 변경횟수: 4분위수, 75%_std",True,robust_month_std,std,,,
+주간상주지 변경 미추정 인구수,주간상주지 변경 미추정 인구수_std,True,robust_month_std,std,,,
+주간상주지 변경횟수 평균,주간상주지 변경횟수 평균_std,True,robust_month_std,std,,,
+"주간상주지 변경횟수: 4분위수, 25%","주간상주지 변경횟수: 4분위수, 25%_std",True,robust_month_std,std,,,
+"주간상주지 변경횟수: 4분위수, 50%","주간상주지 변경횟수: 4분위수, 50%_std",True,robust_month_std,std,,,
+"주간상주지 변경횟수: 4분위수, 75%","주간상주지 변경횟수: 4분위수, 75%_std",True,robust_month_std,std,,,
+출근 소요시간 미추정 인구수,출근 소요시간 미추정 인구수_std,True,robust_month_std,std,,,
+평균 출근 소요시간 평균,평균 출근 소요시간 평균_std,True,robust_month_std,std,,,
+"평균 출근 소요시간: 4분위수, 25%","평균 출근 소요시간: 4분위수, 25%_std",True,robust_month_std,std,,,
+"평균 출근 소요시간: 4분위수, 50%","평균 출근 소요시간: 4분위수, 50%_std",True,robust_month_std,std,,,
+"평균 출근 소요시간: 4분위수, 75%","평균 출근 소요시간: 4분위수, 75%_std",True,robust_month_std,std,,,
+근무시간 미추정 인구수,근무시간 미추정 인구수_std,True,robust_month_std,std,,,
+평균 근무시간 평균,평균 근무시간 평균_std,True,robust_month_std,std,,,
+"평균 근무시간: 4분위수, 25%","평균 근무시간: 4분위수, 25%_std",True,robust_month_std,std,,,
+"평균 근무시간: 4분위수, 50%","평균 근무시간: 4분위수, 50%_std",True,robust_month_std,std,,,
+"평균 근무시간: 4분위수, 75%","평균 근무시간: 4분위수, 75%_std",True,robust_month_std,std,,,
+소액결재 비사용 인구수,소액결재 비사용 인구수_std,True,robust_month_std,std,,,
+소액결재 사용횟수 평균,소액결재 사용횟수 평균_std,True,robust_month_std,std,,,
+"소액결재 사용횟수: 4분위수, 25%","소액결재 사용횟수: 4분위수, 25%_std",True,robust_month_std,std,,,
+"소액결재 사용횟수: 4분위수, 50%","소액결재 사용횟수: 4분위수, 50%_std",True,robust_month_std,std,,,
+"소액결재 사용횟수: 4분위수, 75%","소액결재 사용횟수: 4분위수, 75%_std",True,robust_month_std,std,,,
+소액결재 사용 금액 없는 인구수,소액결재 사용 금액 없는 인구수_std,True,robust_month_std,std,,,
+소액결재 사용금액 평균,소액결재 사용금액 평균_std,True,robust_month_std,std,,,
+"소액결재 사용금액: 4분위수, 25%","소액결재 사용금액: 4분위수, 25%_std",True,robust_month_std,std,,,
+"소액결재 사용금액: 4분위수, 50%","소액결재 사용금액: 4분위수, 50%_std",True,robust_month_std,std,,,
+"소액결재 사용금액: 4분위수, 75%","소액결재 사용금액: 4분위수, 75%_std",True,robust_month_std,std,,,
+최근 3개월 내 요금 연체 비율,최근 3개월 내 요금 연체 비율_std,True,robust_month_std,std,,,
+카카오톡 비사용 인구수,카카오톡 비사용 인구수_std,True,robust_month_std,std,,,
+SNS 사용횟수,SNS 사용횟수_std,True,robust_month_std,std,,,
+"SNS 사용횟수: 4분위수, 25%","SNS 사용횟수: 4분위수, 25%_std",True,robust_month_std,std,,,
+"SNS 사용횟수: 4분위수, 50%","SNS 사용횟수: 4분위수, 50%_std",True,robust_month_std,std,,,
+"SNS 사용횟수: 4분위수, 75%","SNS 사용횟수: 4분위수, 75%_std",True,robust_month_std,std,,,
+평균 통화량,평균 통화량_std,True,robust_month_std,std,,,
+"평균 통화량: 4분위수, 25%","평균 통화량: 4분위수, 25%_std",True,robust_month_std,std,,,
+"평균 통화량: 4분위수, 50%","평균 통화량: 4분위수, 50%_std",True,robust_month_std,std,,,
+"평균 통화량: 4분위수, 75%","평균 통화량: 4분위수, 75%_std",True,robust_month_std,std,,,
+평균 문자량,평균 문자량_std,True,robust_month_std,std,,,
+"평균 문자량: 4분위수, 25%","평균 문자량: 4분위수, 25%_std",True,robust_month_std,std,,,
+"평균 문자량: 4분위수, 50%","평균 문자량: 4분위수, 50%_std",True,robust_month_std,std,,,
+"평균 문자량: 4분위수, 75%","평균 문자량: 4분위수, 75%_std",True,robust_month_std,std,,,
+평균 통화대상자 수,평균 통화대상자 수_std,True,robust_month_std,std,,,
+"평균 통화대상자 수: 4분위수, 25%","평균 통화대상자 수: 4분위수, 25%_std",True,robust_month_std,std,,,
+"평균 통화대상자 수: 4분위수, 50%","평균 통화대상자 수: 4분위수, 50%_std",True,robust_month_std,std,,,
+"평균 통화대상자 수: 4분위수, 75%","평균 통화대상자 수: 4분위수, 75%_std",True,robust_month_std,std,,,
+평균 문자대상자 수,평균 문자대상자 수_std,True,robust_month_std,std,,,
+"평균 문자대상자 수: 4분위수, 25%","평균 문자대상자 수: 4분위수, 25%_std",True,robust_month_std,std,,,
+"평균 문자대상자 수: 4분위수, 50%","평균 문자대상자 수: 4분위수, 50%_std",True,robust_month_std,std,,,
+"평균 문자대상자 수: 4분위수, 75%","평균 문자대상자 수: 4분위수, 75%_std",True,robust_month_std,std,,,
+데이터 사용량,데이터 사용량_std,True,robust_month_std,std,,,
+"데이터 사용량: 4분위수, 25%","데이터 사용량: 4분위수, 25%_std",True,robust_month_std,std,,,
+"데이터 사용량: 4분위수, 50%","데이터 사용량: 4분위수, 50%_std",True,robust_month_std,std,,,
+"데이터 사용량: 4분위수, 75%","데이터 사용량: 4분위수, 75%_std",True,robust_month_std,std,,,
+평일 총 이동 횟수 미추정 인구수,평일 총 이동 횟수 미추정 인구수_std,True,robust_month_std,std,,,
+평일 총 이동 횟수,평일 총 이동 횟수_std,True,robust_month_std,std,,,
+"평일 총 이동 횟수: 4분위수, 25%","평일 총 이동 횟수: 4분위수, 25%_std",True,robust_month_std,std,,,
+"평일 총 이동 횟수: 4분위수, 50%","평일 총 이동 횟수: 4분위수, 50%_std",True,robust_month_std,std,,,
+"평일 총 이동 횟수: 4분위수, 75%","평일 총 이동 횟수: 4분위수, 75%_std",True,robust_month_std,std,,,
+휴일 이동 미추정 인구수,휴일 이동 미추정 인구수_std,True,robust_month_std,std,,,
+휴일 총 이동 횟수 평균,휴일 총 이동 횟수 평균_std,True,robust_month_std,std,,,
+"휴일 총 이동 횟수: 4분위수, 25%","휴일 총 이동 횟수: 4분위수, 25%_std",True,robust_month_std,std,,,
+"휴일 총 이동 횟수: 4분위수, 50%","휴일 총 이동 횟수: 4분위수, 50%_std",True,robust_month_std,std,,,
+"휴일 총 이동 횟수: 4분위수, 75%","휴일 총 이동 횟수: 4분위수, 75%_std",True,robust_month_std,std,,,
+집 추정 위치 평일 총 체류시간 미추정 인구수,집 추정 위치 평일 총 체류시간 미추정 인구수_std,True,robust_month_std,std,,,
+집 추정 위치 평일 총 체류시간,집 추정 위치 평일 총 체류시간_std,True,robust_month_std,std,,,
+"집 추정 위치 평일 총 체류시간: 4분위수, 25%","집 추정 위치 평일 총 체류시간: 4분위수, 25%_std",True,robust_month_std,std,,,
+"집 추정 위치 평일 총 체류시간: 4분위수, 50%","집 추정 위치 평일 총 체류시간: 4분위수, 50%_std",True,robust_month_std,std,,,
+"집 추정 위치 평일 총 체류시간: 4분위수, 75%","집 추정 위치 평일 총 체류시간: 4분위수, 75%_std",True,robust_month_std,std,,,
+집 추정 위치 휴일 총 체류시간 미추정 인구수,집 추정 위치 휴일 총 체류시간 미추정 인구수_std,True,robust_month_std,std,,,
+집 추정 위치 휴일 총 체류시간,집 추정 위치 휴일 총 체류시간_std,True,robust_month_std,std,,,
+"집 추정 위치 휴일 총 체류시간: 4분위수, 25%","집 추정 위치 휴일 총 체류시간: 4분위수, 25%_std",True,robust_month_std,std,,,
+"집 추정 위치 휴일 총 체류시간: 4분위수, 50%","집 추정 위치 휴일 총 체류시간: 4분위수, 50%_std",True,robust_month_std,std,,,
+"집 추정 위치 휴일 총 체류시간: 4분위수, 75%","집 추정 위치 휴일 총 체류시간: 4분위수, 75%_std",True,robust_month_std,std,,,
+평일 총 이동 거리 미추정 인구수,평일 총 이동 거리 미추정 인구수_std,True,robust_month_std,std,,,
+평일 총 이동 거리 합계,평일 총 이동 거리 합계_std,True,robust_month_std,std,,,
+"평일 총 이동 거리 합계: 4분위수, 25%","평일 총 이동 거리 합계: 4분위수, 25%_std",True,robust_month_std,std,,,
+"평일 총 이동 거리 합계: 4분위수, 50%","평일 총 이동 거리 합계: 4분위수, 50%_std",True,robust_month_std,std,,,
+"평일 총 이동 거리 합계: 4분위수, 75%","평일 총 이동 거리 합계: 4분위수, 75%_std",True,robust_month_std,std,,,
+휴일 총 이동 거리 미추정 인구수,휴일 총 이동 거리 미추정 인구수_std,True,robust_month_std,std,,,
+휴일 총 이동 거리 합계,휴일 총 이동 거리 합계_std,True,robust_month_std,std,,,
+"휴일 총 이동 거리 합계: 4분위수, 25%","휴일 총 이동 거리 합계: 4분위수, 25%_std",True,robust_month_std,std,,,
+"휴일 총 이동 거리 합계: 4분위수, 50%","휴일 총 이동 거리 합계: 4분위수, 50%_std",True,robust_month_std,std,,,
+"휴일 총 이동 거리 합계: 4분위수, 75%","휴일 총 이동 거리 합계: 4분위수, 75%_std",True,robust_month_std,std,,,
+지하철 이용 미추정 인구수,지하철 이용 미추정 인구수_std,True,robust_month_std,std,,,
+지하철이동일수 합계,지하철이동일수 합계_std,True,robust_month_std,std,,,
+"지하철이동일수 합계: 4분위수, 25%","지하철이동일수 합계: 4분위수, 25%_std",True,robust_month_std,std,,,
+"지하철이동일수 합계: 4분위수, 50%","지하철이동일수 합계: 4분위수, 50%_std",True,robust_month_std,std,,,
+"지하철이동일수 합계: 4분위수, 75%","지하철이동일수 합계: 4분위수, 75%_std",True,robust_month_std,std,,,
+게임 서비스 사용 미추정 인구수,게임 서비스 사용 미추정 인구수_std,True,robust_month_std,std,,,
+게임 서비스 사용일수,게임 서비스 사용일수_std,True,robust_month_std,std,,,
+"게임 서비스 사용일수: 4분위수, 25%","게임 서비스 사용일수: 4분위수, 25%_std",True,robust_month_std,std,,,
+"게임 서비스 사용일수: 4분위수, 50%","게임 서비스 사용일수: 4분위수, 50%_std",True,robust_month_std,std,,,
+"게임 서비스 사용일수: 4분위수, 75%","게임 서비스 사용일수: 4분위수, 75%_std",True,robust_month_std,std,,,
+금융 서비스 사용 미추정 인구수,금융 서비스 사용 미추정 인구수_std,True,robust_month_std,std,,,
+금융 서비스 사용일수,금융 서비스 사용일수_std,True,robust_month_std,std,,,
+"금융 서비스 사용일수: 4분위수, 25%","금융 서비스 사용일수: 4분위수, 25%_std",True,robust_month_std,std,,,
+"금융 서비스 사용일수: 4분위수, 50%","금융 서비스 사용일수: 4분위수, 50%_std",True,robust_month_std,std,,,
+"금융 서비스 사용일수: 4분위수, 75%","금융 서비스 사용일수: 4분위수, 75%_std",True,robust_month_std,std,,,
+쇼핑 서비스 사용 미추정 인구수,쇼핑 서비스 사용 미추정 인구수_std,True,robust_month_std,std,,,
+쇼핑 서비스 사용일수,쇼핑 서비스 사용일수_std,True,robust_month_std,std,,,
+"쇼핑 서비스 사용일수: 4분위수, 25%","쇼핑 서비스 사용일수: 4분위수, 25%_std",True,robust_month_std,std,,,
+"쇼핑 서비스 사용일수: 4분위수, 50%","쇼핑 서비스 사용일수: 4분위수, 50%_std",True,robust_month_std,std,,,
+"쇼핑 서비스 사용일수: 4분위수, 75%","쇼핑 서비스 사용일수: 4분위수, 75%_std",True,robust_month_std,std,,,
+동영상/방송 서비스 사용 미추정 인구수,동영상/방송 서비스 사용 미추정 인구수_std,True,robust_month_std,std,,,
+동영상/방송 서비스 사용일수,동영상/방송 서비스 사용일수_std,True,robust_month_std,std,,,
+"동영상/방송 서비스 사용일수: 4분위수, 25%","동영상/방송 서비스 사용일수: 4분위수, 25%_std",True,robust_month_std,std,,,
+"동영상/방송 서비스 사용일수: 4분위수, 50%","동영상/방송 서비스 사용일수: 4분위수, 50%_std",True,robust_month_std,std,,,
+"동영상/방송 서비스 사용일수: 4분위수, 75%","동영상/방송 서비스 사용일수: 4분위수, 75%_std",True,robust_month_std,std,,,
+유튜브 사용 미추정 인구수,유튜브 사용 미추정 인구수_std,True,robust_month_std,std,,,
+유튜브 사용일수,유튜브 사용일수_std,True,robust_month_std,std,,,
+"유튜브 사용일수: 4분위수, 25%","유튜브 사용일수: 4분위수, 25%_std",True,robust_month_std,std,,,
+"유튜브 사용일수: 4분위수, 50%","유튜브 사용일수: 4분위수, 50%_std",True,robust_month_std,std,,,
+"유튜브 사용일수: 4분위수, 75%","유튜브 사용일수: 4분위수, 75%_std",True,robust_month_std,std,,,
+넷플릭스 사용 미추정 인구수,넷플릭스 사용 미추정 인구수_std,True,robust_month_std,std,,,
+넷플릭스 사용일수,넷플릭스 사용일수_std,True,robust_month_std,std,,,
+"넷플릭스 사용일수: 4분위수, 25%","넷플릭스 사용일수: 4분위수, 25%_std",True,robust_month_std,std,,,
+"넷플릭스 사용일수: 4분위수, 50%","넷플릭스 사용일수: 4분위수, 50%_std",True,robust_month_std,std,,,
+"넷플릭스 사용일수: 4분위수, 75%","넷플릭스 사용일수: 4분위수, 75%_std",True,robust_month_std,std,,,
+배달 서비스 사용 미추정 인구수,배달 서비스 사용 미추정 인구수_std,True,robust_month_std,std,,,
+배달 서비스 사용일수,배달 서비스 사용일수_std,True,robust_month_std,std,,,
+"배달 서비스 사용일수: 4분위수, 25%","배달 서비스 사용일수: 4분위수, 25%_std",True,robust_month_std,std,,,
+"배달 서비스 사용일수: 4분위수, 50%","배달 서비스 사용일수: 4분위수, 50%_std",True,robust_month_std,std,,,
+"배달 서비스 사용일수: 4분위수, 75%","배달 서비스 사용일수: 4분위수, 75%_std",True,robust_month_std,std,,,
+배달_브랜드 서비스 사용 미추정 인구수,배달_브랜드 서비스 사용 미추정 인구수_std,True,robust_month_std,std,,,
+배달_브랜드 서비스 사용일수,배달_브랜드 서비스 사용일수_std,True,robust_month_std,std,,,
+"배달_브랜드 서비스 사용일수: 4분위수, 25%","배달_브랜드 서비스 사용일수: 4분위수, 25%_std",True,robust_month_std,std,,,
+"배달_브랜드 서비스 사용일수: 4분위수, 50%","배달_브랜드 서비스 사용일수: 4분위수, 50%_std",True,robust_month_std,std,,,
+"배달_브랜드 서비스 사용일수: 4분위수, 75%","배달_브랜드 서비스 사용일수: 4분위수, 75%_std",True,robust_month_std,std,,,
+배달_식재료 서비스 사용 미추정 인구수,배달_식재료 서비스 사용 미추정 인구수_std,True,robust_month_std,std,,,
+배달_식재료 서비스 사용일수,배달_식재료 서비스 사용일수_std,True,robust_month_std,std,,,
+"배달_식재료 서비스 사용일수: 4분위수, 25%","배달_식재료 서비스 사용일수: 4분위수, 25%_std",True,robust_month_std,std,,,
+"배달_식재료 서비스 사용일수: 4분위수, 50%","배달_식재료 서비스 사용일수: 4분위수, 50%_std",True,robust_month_std,std,,,
+"배달_식재료 서비스 사용일수: 4분위수, 75%","배달_식재료 서비스 사용일수: 4분위수, 75%_std",True,robust_month_std,std,,,
+총인구,총인구_std,True,robust_month_std,std,,,
+persona_p0,persona_p0_std,True,robust_month_std,std,,,
+persona_p1,persona_p1_std,True,robust_month_std,std,,,
+persona_p2,persona_p2_std,True,robust_month_std,std,,,
+persona_label,persona_label_std,True,robust_month_std,std,,,
+persona_conf,persona_conf_std,True,robust_month_std,std,,,
+proba_LBL_LIVELIHOOD,proba_LBL_LIVELIHOOD_std,True,robust_month_std,std,,,
+proba_LBL_CARE,proba_LBL_CARE_std,True,robust_month_std,std,,,
+proba_LBL_HEALTH_MENTAL_DELTA,proba_LBL_HEALTH_MENTAL_DELTA_std,True,robust_month_std,std,,,
+proba_LBL_DAILY_LONGTERM,proba_LBL_DAILY_LONGTERM_std,True,robust_month_std,std,,,
+proba_LBL_HOUSING,proba_LBL_HOUSING_std,True,robust_month_std,std,,,
+proba_LBL_EMPLOYMENT,proba_LBL_EMPLOYMENT_std,True,robust_month_std,std,,,
+proba_LBL_ISOLATION,proba_LBL_ISOLATION_std,True,robust_month_std,std,,,
+pred_LBL_LIVELIHOOD,pred_LBL_LIVELIHOOD_std,True,robust_month_std,std,,,
+pred_LBL_CARE,pred_LBL_CARE_std,True,robust_month_std,std,,,
+pred_LBL_HEALTH_MENTAL_DELTA,pred_LBL_HEALTH_MENTAL_DELTA_std,True,robust_month_std,std,,,
+pred_LBL_DAILY_LONGTERM,pred_LBL_DAILY_LONGTERM_std,True,robust_month_std,std,,,
+pred_LBL_HOUSING,pred_LBL_HOUSING_std,True,robust_month_std,std,,,
+pred_LBL_EMPLOYMENT,pred_LBL_EMPLOYMENT_std,True,robust_month_std,std,,,
+pred_LBL_ISOLATION,pred_LBL_ISOLATION_std,True,robust_month_std,std,,,
+,,True,,derived,총인구수_std,총인구수_std_delta3m,month_mean
+,,True,,derived,총인구수_std,총인구수_std_trend12m,month_mean
+,,True,,derived,1인가구수_std,1인가구수_std_delta3m,month_mean
+,,True,,derived,1인가구수_std,1인가구수_std_trend12m,month_mean
+,,True,,derived,야간상주지 변경 미추정 인구 수_std,야간상주지 변경 미추정 인구 수_std_delta3m,month_mean
+,,True,,derived,야간상주지 변경 미추정 인구 수_std,야간상주지 변경 미추정 인구 수_std_trend12m,month_mean
+,,True,,derived,야간상주지 변경횟수 평균_std,야간상주지 변경횟수 평균_std_delta3m,month_mean
+,,True,,derived,야간상주지 변경횟수 평균_std,야간상주지 변경횟수 평균_std_trend12m,month_mean
+,,True,,derived,"야간상주지 변경횟수: 4분위수, 25%_std","야간상주지 변경횟수: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"야간상주지 변경횟수: 4분위수, 25%_std","야간상주지 변경횟수: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"야간상주지 변경횟수: 4분위수, 50%_std","야간상주지 변경횟수: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"야간상주지 변경횟수: 4분위수, 50%_std","야간상주지 변경횟수: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"야간상주지 변경횟수: 4분위수, 75%_std","야간상주지 변경횟수: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"야간상주지 변경횟수: 4분위수, 75%_std","야간상주지 변경횟수: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,주간상주지 변경 미추정 인구수_std,주간상주지 변경 미추정 인구수_std_delta3m,month_mean
+,,True,,derived,주간상주지 변경 미추정 인구수_std,주간상주지 변경 미추정 인구수_std_trend12m,month_mean
+,,True,,derived,주간상주지 변경횟수 평균_std,주간상주지 변경횟수 평균_std_delta3m,month_mean
+,,True,,derived,주간상주지 변경횟수 평균_std,주간상주지 변경횟수 평균_std_trend12m,month_mean
+,,True,,derived,"주간상주지 변경횟수: 4분위수, 25%_std","주간상주지 변경횟수: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"주간상주지 변경횟수: 4분위수, 25%_std","주간상주지 변경횟수: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"주간상주지 변경횟수: 4분위수, 50%_std","주간상주지 변경횟수: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"주간상주지 변경횟수: 4분위수, 50%_std","주간상주지 변경횟수: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"주간상주지 변경횟수: 4분위수, 75%_std","주간상주지 변경횟수: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"주간상주지 변경횟수: 4분위수, 75%_std","주간상주지 변경횟수: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,출근 소요시간 미추정 인구수_std,출근 소요시간 미추정 인구수_std_delta3m,month_mean
+,,True,,derived,출근 소요시간 미추정 인구수_std,출근 소요시간 미추정 인구수_std_trend12m,month_mean
+,,True,,derived,평균 출근 소요시간 평균_std,평균 출근 소요시간 평균_std_delta3m,month_mean
+,,True,,derived,평균 출근 소요시간 평균_std,평균 출근 소요시간 평균_std_trend12m,month_mean
+,,True,,derived,"평균 출근 소요시간: 4분위수, 25%_std","평균 출근 소요시간: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"평균 출근 소요시간: 4분위수, 25%_std","평균 출근 소요시간: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"평균 출근 소요시간: 4분위수, 50%_std","평균 출근 소요시간: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"평균 출근 소요시간: 4분위수, 50%_std","평균 출근 소요시간: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"평균 출근 소요시간: 4분위수, 75%_std","평균 출근 소요시간: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"평균 출근 소요시간: 4분위수, 75%_std","평균 출근 소요시간: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,근무시간 미추정 인구수_std,근무시간 미추정 인구수_std_delta3m,month_mean
+,,True,,derived,근무시간 미추정 인구수_std,근무시간 미추정 인구수_std_trend12m,month_mean
+,,True,,derived,평균 근무시간 평균_std,평균 근무시간 평균_std_delta3m,month_mean
+,,True,,derived,평균 근무시간 평균_std,평균 근무시간 평균_std_trend12m,month_mean
+,,True,,derived,"평균 근무시간: 4분위수, 25%_std","평균 근무시간: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"평균 근무시간: 4분위수, 25%_std","평균 근무시간: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"평균 근무시간: 4분위수, 50%_std","평균 근무시간: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"평균 근무시간: 4분위수, 50%_std","평균 근무시간: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"평균 근무시간: 4분위수, 75%_std","평균 근무시간: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"평균 근무시간: 4분위수, 75%_std","평균 근무시간: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,소액결재 비사용 인구수_std,소액결재 비사용 인구수_std_delta3m,month_mean
+,,True,,derived,소액결재 비사용 인구수_std,소액결재 비사용 인구수_std_trend12m,month_mean
+,,True,,derived,소액결재 사용횟수 평균_std,소액결재 사용횟수 평균_std_delta3m,month_mean
+,,True,,derived,소액결재 사용횟수 평균_std,소액결재 사용횟수 평균_std_trend12m,month_mean
+,,True,,derived,"소액결재 사용횟수: 4분위수, 25%_std","소액결재 사용횟수: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"소액결재 사용횟수: 4분위수, 25%_std","소액결재 사용횟수: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"소액결재 사용횟수: 4분위수, 50%_std","소액결재 사용횟수: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"소액결재 사용횟수: 4분위수, 50%_std","소액결재 사용횟수: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"소액결재 사용횟수: 4분위수, 75%_std","소액결재 사용횟수: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"소액결재 사용횟수: 4분위수, 75%_std","소액결재 사용횟수: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,소액결재 사용 금액 없는 인구수_std,소액결재 사용 금액 없는 인구수_std_delta3m,month_mean
+,,True,,derived,소액결재 사용 금액 없는 인구수_std,소액결재 사용 금액 없는 인구수_std_trend12m,month_mean
+,,True,,derived,소액결재 사용금액 평균_std,소액결재 사용금액 평균_std_delta3m,month_mean
+,,True,,derived,소액결재 사용금액 평균_std,소액결재 사용금액 평균_std_trend12m,month_mean
+,,True,,derived,"소액결재 사용금액: 4분위수, 25%_std","소액결재 사용금액: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"소액결재 사용금액: 4분위수, 25%_std","소액결재 사용금액: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"소액결재 사용금액: 4분위수, 50%_std","소액결재 사용금액: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"소액결재 사용금액: 4분위수, 50%_std","소액결재 사용금액: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"소액결재 사용금액: 4분위수, 75%_std","소액결재 사용금액: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"소액결재 사용금액: 4분위수, 75%_std","소액결재 사용금액: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,최근 3개월 내 요금 연체 비율_std,최근 3개월 내 요금 연체 비율_std_delta3m,month_mean
+,,True,,derived,최근 3개월 내 요금 연체 비율_std,최근 3개월 내 요금 연체 비율_std_trend12m,month_mean
+,,True,,derived,카카오톡 비사용 인구수_std,카카오톡 비사용 인구수_std_delta3m,month_mean
+,,True,,derived,카카오톡 비사용 인구수_std,카카오톡 비사용 인구수_std_trend12m,month_mean
+,,True,,derived,SNS 사용횟수_std,SNS 사용횟수_std_delta3m,month_mean
+,,True,,derived,SNS 사용횟수_std,SNS 사용횟수_std_trend12m,month_mean
+,,True,,derived,"SNS 사용횟수: 4분위수, 25%_std","SNS 사용횟수: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"SNS 사용횟수: 4분위수, 25%_std","SNS 사용횟수: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"SNS 사용횟수: 4분위수, 50%_std","SNS 사용횟수: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"SNS 사용횟수: 4분위수, 50%_std","SNS 사용횟수: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"SNS 사용횟수: 4분위수, 75%_std","SNS 사용횟수: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"SNS 사용횟수: 4분위수, 75%_std","SNS 사용횟수: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,평균 통화량_std,평균 통화량_std_delta3m,month_mean
+,,True,,derived,평균 통화량_std,평균 통화량_std_trend12m,month_mean
+,,True,,derived,"평균 통화량: 4분위수, 25%_std","평균 통화량: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"평균 통화량: 4분위수, 25%_std","평균 통화량: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"평균 통화량: 4분위수, 50%_std","평균 통화량: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"평균 통화량: 4분위수, 50%_std","평균 통화량: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"평균 통화량: 4분위수, 75%_std","평균 통화량: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"평균 통화량: 4분위수, 75%_std","평균 통화량: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,평균 문자량_std,평균 문자량_std_delta3m,month_mean
+,,True,,derived,평균 문자량_std,평균 문자량_std_trend12m,month_mean
+,,True,,derived,"평균 문자량: 4분위수, 25%_std","평균 문자량: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"평균 문자량: 4분위수, 25%_std","평균 문자량: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"평균 문자량: 4분위수, 50%_std","평균 문자량: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"평균 문자량: 4분위수, 50%_std","평균 문자량: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"평균 문자량: 4분위수, 75%_std","평균 문자량: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"평균 문자량: 4분위수, 75%_std","평균 문자량: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,평균 통화대상자 수_std,평균 통화대상자 수_std_delta3m,month_mean
+,,True,,derived,평균 통화대상자 수_std,평균 통화대상자 수_std_trend12m,month_mean
+,,True,,derived,"평균 통화대상자 수: 4분위수, 25%_std","평균 통화대상자 수: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"평균 통화대상자 수: 4분위수, 25%_std","평균 통화대상자 수: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"평균 통화대상자 수: 4분위수, 50%_std","평균 통화대상자 수: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"평균 통화대상자 수: 4분위수, 50%_std","평균 통화대상자 수: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"평균 통화대상자 수: 4분위수, 75%_std","평균 통화대상자 수: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"평균 통화대상자 수: 4분위수, 75%_std","평균 통화대상자 수: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,평균 문자대상자 수_std,평균 문자대상자 수_std_delta3m,month_mean
+,,True,,derived,평균 문자대상자 수_std,평균 문자대상자 수_std_trend12m,month_mean
+,,True,,derived,"평균 문자대상자 수: 4분위수, 25%_std","평균 문자대상자 수: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"평균 문자대상자 수: 4분위수, 25%_std","평균 문자대상자 수: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"평균 문자대상자 수: 4분위수, 50%_std","평균 문자대상자 수: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"평균 문자대상자 수: 4분위수, 50%_std","평균 문자대상자 수: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"평균 문자대상자 수: 4분위수, 75%_std","평균 문자대상자 수: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"평균 문자대상자 수: 4분위수, 75%_std","평균 문자대상자 수: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,데이터 사용량_std,데이터 사용량_std_delta3m,month_mean
+,,True,,derived,데이터 사용량_std,데이터 사용량_std_trend12m,month_mean
+,,True,,derived,"데이터 사용량: 4분위수, 25%_std","데이터 사용량: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"데이터 사용량: 4분위수, 25%_std","데이터 사용량: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"데이터 사용량: 4분위수, 50%_std","데이터 사용량: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"데이터 사용량: 4분위수, 50%_std","데이터 사용량: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"데이터 사용량: 4분위수, 75%_std","데이터 사용량: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"데이터 사용량: 4분위수, 75%_std","데이터 사용량: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,평일 총 이동 횟수 미추정 인구수_std,평일 총 이동 횟수 미추정 인구수_std_delta3m,month_mean
+,,True,,derived,평일 총 이동 횟수 미추정 인구수_std,평일 총 이동 횟수 미추정 인구수_std_trend12m,month_mean
+,,True,,derived,평일 총 이동 횟수_std,평일 총 이동 횟수_std_delta3m,month_mean
+,,True,,derived,평일 총 이동 횟수_std,평일 총 이동 횟수_std_trend12m,month_mean
+,,True,,derived,"평일 총 이동 횟수: 4분위수, 25%_std","평일 총 이동 횟수: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"평일 총 이동 횟수: 4분위수, 25%_std","평일 총 이동 횟수: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"평일 총 이동 횟수: 4분위수, 50%_std","평일 총 이동 횟수: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"평일 총 이동 횟수: 4분위수, 50%_std","평일 총 이동 횟수: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"평일 총 이동 횟수: 4분위수, 75%_std","평일 총 이동 횟수: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"평일 총 이동 횟수: 4분위수, 75%_std","평일 총 이동 횟수: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,휴일 이동 미추정 인구수_std,휴일 이동 미추정 인구수_std_delta3m,month_mean
+,,True,,derived,휴일 이동 미추정 인구수_std,휴일 이동 미추정 인구수_std_trend12m,month_mean
+,,True,,derived,휴일 총 이동 횟수 평균_std,휴일 총 이동 횟수 평균_std_delta3m,month_mean
+,,True,,derived,휴일 총 이동 횟수 평균_std,휴일 총 이동 횟수 평균_std_trend12m,month_mean
+,,True,,derived,"휴일 총 이동 횟수: 4분위수, 25%_std","휴일 총 이동 횟수: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"휴일 총 이동 횟수: 4분위수, 25%_std","휴일 총 이동 횟수: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"휴일 총 이동 횟수: 4분위수, 50%_std","휴일 총 이동 횟수: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"휴일 총 이동 횟수: 4분위수, 50%_std","휴일 총 이동 횟수: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"휴일 총 이동 횟수: 4분위수, 75%_std","휴일 총 이동 횟수: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"휴일 총 이동 횟수: 4분위수, 75%_std","휴일 총 이동 횟수: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,집 추정 위치 평일 총 체류시간 미추정 인구수_std,집 추정 위치 평일 총 체류시간 미추정 인구수_std_delta3m,month_mean
+,,True,,derived,집 추정 위치 평일 총 체류시간 미추정 인구수_std,집 추정 위치 평일 총 체류시간 미추정 인구수_std_trend12m,month_mean
+,,True,,derived,집 추정 위치 평일 총 체류시간_std,집 추정 위치 평일 총 체류시간_std_delta3m,month_mean
+,,True,,derived,집 추정 위치 평일 총 체류시간_std,집 추정 위치 평일 총 체류시간_std_trend12m,month_mean
+,,True,,derived,"집 추정 위치 평일 총 체류시간: 4분위수, 25%_std","집 추정 위치 평일 총 체류시간: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"집 추정 위치 평일 총 체류시간: 4분위수, 25%_std","집 추정 위치 평일 총 체류시간: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"집 추정 위치 평일 총 체류시간: 4분위수, 50%_std","집 추정 위치 평일 총 체류시간: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"집 추정 위치 평일 총 체류시간: 4분위수, 50%_std","집 추정 위치 평일 총 체류시간: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"집 추정 위치 평일 총 체류시간: 4분위수, 75%_std","집 추정 위치 평일 총 체류시간: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"집 추정 위치 평일 총 체류시간: 4분위수, 75%_std","집 추정 위치 평일 총 체류시간: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,집 추정 위치 휴일 총 체류시간 미추정 인구수_std,집 추정 위치 휴일 총 체류시간 미추정 인구수_std_delta3m,month_mean
+,,True,,derived,집 추정 위치 휴일 총 체류시간 미추정 인구수_std,집 추정 위치 휴일 총 체류시간 미추정 인구수_std_trend12m,month_mean
+,,True,,derived,집 추정 위치 휴일 총 체류시간_std,집 추정 위치 휴일 총 체류시간_std_delta3m,month_mean
+,,True,,derived,집 추정 위치 휴일 총 체류시간_std,집 추정 위치 휴일 총 체류시간_std_trend12m,month_mean
+,,True,,derived,"집 추정 위치 휴일 총 체류시간: 4분위수, 25%_std","집 추정 위치 휴일 총 체류시간: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"집 추정 위치 휴일 총 체류시간: 4분위수, 25%_std","집 추정 위치 휴일 총 체류시간: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"집 추정 위치 휴일 총 체류시간: 4분위수, 50%_std","집 추정 위치 휴일 총 체류시간: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"집 추정 위치 휴일 총 체류시간: 4분위수, 50%_std","집 추정 위치 휴일 총 체류시간: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"집 추정 위치 휴일 총 체류시간: 4분위수, 75%_std","집 추정 위치 휴일 총 체류시간: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"집 추정 위치 휴일 총 체류시간: 4분위수, 75%_std","집 추정 위치 휴일 총 체류시간: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,평일 총 이동 거리 미추정 인구수_std,평일 총 이동 거리 미추정 인구수_std_delta3m,month_mean
+,,True,,derived,평일 총 이동 거리 미추정 인구수_std,평일 총 이동 거리 미추정 인구수_std_trend12m,month_mean
+,,True,,derived,평일 총 이동 거리 합계_std,평일 총 이동 거리 합계_std_delta3m,month_mean
+,,True,,derived,평일 총 이동 거리 합계_std,평일 총 이동 거리 합계_std_trend12m,month_mean
+,,True,,derived,"평일 총 이동 거리 합계: 4분위수, 25%_std","평일 총 이동 거리 합계: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"평일 총 이동 거리 합계: 4분위수, 25%_std","평일 총 이동 거리 합계: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"평일 총 이동 거리 합계: 4분위수, 50%_std","평일 총 이동 거리 합계: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"평일 총 이동 거리 합계: 4분위수, 50%_std","평일 총 이동 거리 합계: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"평일 총 이동 거리 합계: 4분위수, 75%_std","평일 총 이동 거리 합계: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"평일 총 이동 거리 합계: 4분위수, 75%_std","평일 총 이동 거리 합계: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,휴일 총 이동 거리 미추정 인구수_std,휴일 총 이동 거리 미추정 인구수_std_delta3m,month_mean
+,,True,,derived,휴일 총 이동 거리 미추정 인구수_std,휴일 총 이동 거리 미추정 인구수_std_trend12m,month_mean
+,,True,,derived,휴일 총 이동 거리 합계_std,휴일 총 이동 거리 합계_std_delta3m,month_mean
+,,True,,derived,휴일 총 이동 거리 합계_std,휴일 총 이동 거리 합계_std_trend12m,month_mean
+,,True,,derived,"휴일 총 이동 거리 합계: 4분위수, 25%_std","휴일 총 이동 거리 합계: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"휴일 총 이동 거리 합계: 4분위수, 25%_std","휴일 총 이동 거리 합계: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"휴일 총 이동 거리 합계: 4분위수, 50%_std","휴일 총 이동 거리 합계: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"휴일 총 이동 거리 합계: 4분위수, 50%_std","휴일 총 이동 거리 합계: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"휴일 총 이동 거리 합계: 4분위수, 75%_std","휴일 총 이동 거리 합계: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"휴일 총 이동 거리 합계: 4분위수, 75%_std","휴일 총 이동 거리 합계: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,지하철 이용 미추정 인구수_std,지하철 이용 미추정 인구수_std_delta3m,month_mean
+,,True,,derived,지하철 이용 미추정 인구수_std,지하철 이용 미추정 인구수_std_trend12m,month_mean
+,,True,,derived,지하철이동일수 합계_std,지하철이동일수 합계_std_delta3m,month_mean
+,,True,,derived,지하철이동일수 합계_std,지하철이동일수 합계_std_trend12m,month_mean
+,,True,,derived,"지하철이동일수 합계: 4분위수, 25%_std","지하철이동일수 합계: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"지하철이동일수 합계: 4분위수, 25%_std","지하철이동일수 합계: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"지하철이동일수 합계: 4분위수, 50%_std","지하철이동일수 합계: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"지하철이동일수 합계: 4분위수, 50%_std","지하철이동일수 합계: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"지하철이동일수 합계: 4분위수, 75%_std","지하철이동일수 합계: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"지하철이동일수 합계: 4분위수, 75%_std","지하철이동일수 합계: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,게임 서비스 사용 미추정 인구수_std,게임 서비스 사용 미추정 인구수_std_delta3m,month_mean
+,,True,,derived,게임 서비스 사용 미추정 인구수_std,게임 서비스 사용 미추정 인구수_std_trend12m,month_mean
+,,True,,derived,게임 서비스 사용일수_std,게임 서비스 사용일수_std_delta3m,month_mean
+,,True,,derived,게임 서비스 사용일수_std,게임 서비스 사용일수_std_trend12m,month_mean
+,,True,,derived,"게임 서비스 사용일수: 4분위수, 25%_std","게임 서비스 사용일수: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"게임 서비스 사용일수: 4분위수, 25%_std","게임 서비스 사용일수: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"게임 서비스 사용일수: 4분위수, 50%_std","게임 서비스 사용일수: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"게임 서비스 사용일수: 4분위수, 50%_std","게임 서비스 사용일수: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"게임 서비스 사용일수: 4분위수, 75%_std","게임 서비스 사용일수: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"게임 서비스 사용일수: 4분위수, 75%_std","게임 서비스 사용일수: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,금융 서비스 사용 미추정 인구수_std,금융 서비스 사용 미추정 인구수_std_delta3m,month_mean
+,,True,,derived,금융 서비스 사용 미추정 인구수_std,금융 서비스 사용 미추정 인구수_std_trend12m,month_mean
+,,True,,derived,금융 서비스 사용일수_std,금융 서비스 사용일수_std_delta3m,month_mean
+,,True,,derived,금융 서비스 사용일수_std,금융 서비스 사용일수_std_trend12m,month_mean
+,,True,,derived,"금융 서비스 사용일수: 4분위수, 25%_std","금융 서비스 사용일수: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"금융 서비스 사용일수: 4분위수, 25%_std","금융 서비스 사용일수: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"금융 서비스 사용일수: 4분위수, 50%_std","금융 서비스 사용일수: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"금융 서비스 사용일수: 4분위수, 50%_std","금융 서비스 사용일수: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"금융 서비스 사용일수: 4분위수, 75%_std","금융 서비스 사용일수: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"금융 서비스 사용일수: 4분위수, 75%_std","금융 서비스 사용일수: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,쇼핑 서비스 사용 미추정 인구수_std,쇼핑 서비스 사용 미추정 인구수_std_delta3m,month_mean
+,,True,,derived,쇼핑 서비스 사용 미추정 인구수_std,쇼핑 서비스 사용 미추정 인구수_std_trend12m,month_mean
+,,True,,derived,쇼핑 서비스 사용일수_std,쇼핑 서비스 사용일수_std_delta3m,month_mean
+,,True,,derived,쇼핑 서비스 사용일수_std,쇼핑 서비스 사용일수_std_trend12m,month_mean
+,,True,,derived,"쇼핑 서비스 사용일수: 4분위수, 25%_std","쇼핑 서비스 사용일수: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"쇼핑 서비스 사용일수: 4분위수, 25%_std","쇼핑 서비스 사용일수: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"쇼핑 서비스 사용일수: 4분위수, 50%_std","쇼핑 서비스 사용일수: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"쇼핑 서비스 사용일수: 4분위수, 50%_std","쇼핑 서비스 사용일수: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"쇼핑 서비스 사용일수: 4분위수, 75%_std","쇼핑 서비스 사용일수: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"쇼핑 서비스 사용일수: 4분위수, 75%_std","쇼핑 서비스 사용일수: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,동영상/방송 서비스 사용 미추정 인구수_std,동영상/방송 서비스 사용 미추정 인구수_std_delta3m,month_mean
+,,True,,derived,동영상/방송 서비스 사용 미추정 인구수_std,동영상/방송 서비스 사용 미추정 인구수_std_trend12m,month_mean
+,,True,,derived,동영상/방송 서비스 사용일수_std,동영상/방송 서비스 사용일수_std_delta3m,month_mean
+,,True,,derived,동영상/방송 서비스 사용일수_std,동영상/방송 서비스 사용일수_std_trend12m,month_mean
+,,True,,derived,"동영상/방송 서비스 사용일수: 4분위수, 25%_std","동영상/방송 서비스 사용일수: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"동영상/방송 서비스 사용일수: 4분위수, 25%_std","동영상/방송 서비스 사용일수: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"동영상/방송 서비스 사용일수: 4분위수, 50%_std","동영상/방송 서비스 사용일수: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"동영상/방송 서비스 사용일수: 4분위수, 50%_std","동영상/방송 서비스 사용일수: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"동영상/방송 서비스 사용일수: 4분위수, 75%_std","동영상/방송 서비스 사용일수: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"동영상/방송 서비스 사용일수: 4분위수, 75%_std","동영상/방송 서비스 사용일수: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,유튜브 사용 미추정 인구수_std,유튜브 사용 미추정 인구수_std_delta3m,month_mean
+,,True,,derived,유튜브 사용 미추정 인구수_std,유튜브 사용 미추정 인구수_std_trend12m,month_mean
+,,True,,derived,유튜브 사용일수_std,유튜브 사용일수_std_delta3m,month_mean
+,,True,,derived,유튜브 사용일수_std,유튜브 사용일수_std_trend12m,month_mean
+,,True,,derived,"유튜브 사용일수: 4분위수, 25%_std","유튜브 사용일수: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"유튜브 사용일수: 4분위수, 25%_std","유튜브 사용일수: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"유튜브 사용일수: 4분위수, 50%_std","유튜브 사용일수: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"유튜브 사용일수: 4분위수, 50%_std","유튜브 사용일수: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"유튜브 사용일수: 4분위수, 75%_std","유튜브 사용일수: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"유튜브 사용일수: 4분위수, 75%_std","유튜브 사용일수: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,넷플릭스 사용 미추정 인구수_std,넷플릭스 사용 미추정 인구수_std_delta3m,month_mean
+,,True,,derived,넷플릭스 사용 미추정 인구수_std,넷플릭스 사용 미추정 인구수_std_trend12m,month_mean
+,,True,,derived,넷플릭스 사용일수_std,넷플릭스 사용일수_std_delta3m,month_mean
+,,True,,derived,넷플릭스 사용일수_std,넷플릭스 사용일수_std_trend12m,month_mean
+,,True,,derived,"넷플릭스 사용일수: 4분위수, 25%_std","넷플릭스 사용일수: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"넷플릭스 사용일수: 4분위수, 25%_std","넷플릭스 사용일수: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"넷플릭스 사용일수: 4분위수, 50%_std","넷플릭스 사용일수: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"넷플릭스 사용일수: 4분위수, 50%_std","넷플릭스 사용일수: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"넷플릭스 사용일수: 4분위수, 75%_std","넷플릭스 사용일수: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"넷플릭스 사용일수: 4분위수, 75%_std","넷플릭스 사용일수: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,배달 서비스 사용 미추정 인구수_std,배달 서비스 사용 미추정 인구수_std_delta3m,month_mean
+,,True,,derived,배달 서비스 사용 미추정 인구수_std,배달 서비스 사용 미추정 인구수_std_trend12m,month_mean
+,,True,,derived,배달 서비스 사용일수_std,배달 서비스 사용일수_std_delta3m,month_mean
+,,True,,derived,배달 서비스 사용일수_std,배달 서비스 사용일수_std_trend12m,month_mean
+,,True,,derived,"배달 서비스 사용일수: 4분위수, 25%_std","배달 서비스 사용일수: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"배달 서비스 사용일수: 4분위수, 25%_std","배달 서비스 사용일수: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"배달 서비스 사용일수: 4분위수, 50%_std","배달 서비스 사용일수: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"배달 서비스 사용일수: 4분위수, 50%_std","배달 서비스 사용일수: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"배달 서비스 사용일수: 4분위수, 75%_std","배달 서비스 사용일수: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"배달 서비스 사용일수: 4분위수, 75%_std","배달 서비스 사용일수: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,배달_브랜드 서비스 사용 미추정 인구수_std,배달_브랜드 서비스 사용 미추정 인구수_std_delta3m,month_mean
+,,True,,derived,배달_브랜드 서비스 사용 미추정 인구수_std,배달_브랜드 서비스 사용 미추정 인구수_std_trend12m,month_mean
+,,True,,derived,배달_브랜드 서비스 사용일수_std,배달_브랜드 서비스 사용일수_std_delta3m,month_mean
+,,True,,derived,배달_브랜드 서비스 사용일수_std,배달_브랜드 서비스 사용일수_std_trend12m,month_mean
+,,True,,derived,"배달_브랜드 서비스 사용일수: 4분위수, 25%_std","배달_브랜드 서비스 사용일수: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"배달_브랜드 서비스 사용일수: 4분위수, 25%_std","배달_브랜드 서비스 사용일수: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"배달_브랜드 서비스 사용일수: 4분위수, 50%_std","배달_브랜드 서비스 사용일수: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"배달_브랜드 서비스 사용일수: 4분위수, 50%_std","배달_브랜드 서비스 사용일수: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"배달_브랜드 서비스 사용일수: 4분위수, 75%_std","배달_브랜드 서비스 사용일수: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"배달_브랜드 서비스 사용일수: 4분위수, 75%_std","배달_브랜드 서비스 사용일수: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,배달_식재료 서비스 사용 미추정 인구수_std,배달_식재료 서비스 사용 미추정 인구수_std_delta3m,month_mean
+,,True,,derived,배달_식재료 서비스 사용 미추정 인구수_std,배달_식재료 서비스 사용 미추정 인구수_std_trend12m,month_mean
+,,True,,derived,배달_식재료 서비스 사용일수_std,배달_식재료 서비스 사용일수_std_delta3m,month_mean
+,,True,,derived,배달_식재료 서비스 사용일수_std,배달_식재료 서비스 사용일수_std_trend12m,month_mean
+,,True,,derived,"배달_식재료 서비스 사용일수: 4분위수, 25%_std","배달_식재료 서비스 사용일수: 4분위수, 25%_std_delta3m",month_mean
+,,True,,derived,"배달_식재료 서비스 사용일수: 4분위수, 25%_std","배달_식재료 서비스 사용일수: 4분위수, 25%_std_trend12m",month_mean
+,,True,,derived,"배달_식재료 서비스 사용일수: 4분위수, 50%_std","배달_식재료 서비스 사용일수: 4분위수, 50%_std_delta3m",month_mean
+,,True,,derived,"배달_식재료 서비스 사용일수: 4분위수, 50%_std","배달_식재료 서비스 사용일수: 4분위수, 50%_std_trend12m",month_mean
+,,True,,derived,"배달_식재료 서비스 사용일수: 4분위수, 75%_std","배달_식재료 서비스 사용일수: 4분위수, 75%_std_delta3m",month_mean
+,,True,,derived,"배달_식재료 서비스 사용일수: 4분위수, 75%_std","배달_식재료 서비스 사용일수: 4분위수, 75%_std_trend12m",month_mean
+,,True,,derived,총인구_std,총인구_std_delta3m,month_mean
+,,True,,derived,총인구_std,총인구_std_trend12m,month_mean
+,,True,,derived,persona_p0_std,persona_p0_std_delta3m,month_mean
+,,True,,derived,persona_p0_std,persona_p0_std_trend12m,month_mean
+,,True,,derived,persona_p1_std,persona_p1_std_delta3m,month_mean
+,,True,,derived,persona_p1_std,persona_p1_std_trend12m,month_mean
+,,True,,derived,persona_p2_std,persona_p2_std_delta3m,month_mean
+,,True,,derived,persona_p2_std,persona_p2_std_trend12m,month_mean
+,,True,,derived,persona_label_std,persona_label_std_delta3m,month_mean
+,,True,,derived,persona_label_std,persona_label_std_trend12m,month_mean
+,,True,,derived,persona_conf_std,persona_conf_std_delta3m,month_mean
+,,True,,derived,persona_conf_std,persona_conf_std_trend12m,month_mean
+,,True,,derived,proba_LBL_LIVELIHOOD_std,proba_LBL_LIVELIHOOD_std_delta3m,month_mean
+,,True,,derived,proba_LBL_LIVELIHOOD_std,proba_LBL_LIVELIHOOD_std_trend12m,month_mean
+,,True,,derived,proba_LBL_CARE_std,proba_LBL_CARE_std_delta3m,month_mean
+,,True,,derived,proba_LBL_CARE_std,proba_LBL_CARE_std_trend12m,month_mean
+,,True,,derived,proba_LBL_HEALTH_MENTAL_DELTA_std,proba_LBL_HEALTH_MENTAL_DELTA_std_delta3m,month_mean
+,,True,,derived,proba_LBL_HEALTH_MENTAL_DELTA_std,proba_LBL_HEALTH_MENTAL_DELTA_std_trend12m,month_mean
+,,True,,derived,proba_LBL_DAILY_LONGTERM_std,proba_LBL_DAILY_LONGTERM_std_delta3m,month_mean
+,,True,,derived,proba_LBL_DAILY_LONGTERM_std,proba_LBL_DAILY_LONGTERM_std_trend12m,month_mean
+,,True,,derived,proba_LBL_HOUSING_std,proba_LBL_HOUSING_std_delta3m,month_mean
+,,True,,derived,proba_LBL_HOUSING_std,proba_LBL_HOUSING_std_trend12m,month_mean
+,,True,,derived,proba_LBL_EMPLOYMENT_std,proba_LBL_EMPLOYMENT_std_delta3m,month_mean
+,,True,,derived,proba_LBL_EMPLOYMENT_std,proba_LBL_EMPLOYMENT_std_trend12m,month_mean
+,,True,,derived,proba_LBL_ISOLATION_std,proba_LBL_ISOLATION_std_delta3m,month_mean
+,,True,,derived,proba_LBL_ISOLATION_std,proba_LBL_ISOLATION_std_trend12m,month_mean
+,,True,,derived,pred_LBL_LIVELIHOOD_std,pred_LBL_LIVELIHOOD_std_delta3m,month_mean
+,,True,,derived,pred_LBL_LIVELIHOOD_std,pred_LBL_LIVELIHOOD_std_trend12m,month_mean
+,,True,,derived,pred_LBL_CARE_std,pred_LBL_CARE_std_delta3m,month_mean
+,,True,,derived,pred_LBL_CARE_std,pred_LBL_CARE_std_trend12m,month_mean
+,,True,,derived,pred_LBL_HEALTH_MENTAL_DELTA_std,pred_LBL_HEALTH_MENTAL_DELTA_std_delta3m,month_mean
+,,True,,derived,pred_LBL_HEALTH_MENTAL_DELTA_std,pred_LBL_HEALTH_MENTAL_DELTA_std_trend12m,month_mean
+,,True,,derived,pred_LBL_DAILY_LONGTERM_std,pred_LBL_DAILY_LONGTERM_std_delta3m,month_mean
+,,True,,derived,pred_LBL_DAILY_LONGTERM_std,pred_LBL_DAILY_LONGTERM_std_trend12m,month_mean
+,,True,,derived,pred_LBL_HOUSING_std,pred_LBL_HOUSING_std_delta3m,month_mean
+,,True,,derived,pred_LBL_HOUSING_std,pred_LBL_HOUSING_std_trend12m,month_mean
+,,True,,derived,pred_LBL_EMPLOYMENT_std,pred_LBL_EMPLOYMENT_std_delta3m,month_mean
+,,True,,derived,pred_LBL_EMPLOYMENT_std,pred_LBL_EMPLOYMENT_std_trend12m,month_mean
+,,True,,derived,pred_LBL_ISOLATION_std,pred_LBL_ISOLATION_std_delta3m,month_mean
+,,True,,derived,pred_LBL_ISOLATION_std,pred_LBL_ISOLATION_std_trend12m,month_mean
