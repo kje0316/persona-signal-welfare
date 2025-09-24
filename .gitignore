@@ -208,4 +208,13 @@ __marimo__/
 
 *.cluade
 .claude/
-CLAUDE.md
+CLAUDE.mdsrc/modules/data_analysis/risk_scoring/telecom_group_monthly_all.csv
+src/modules/data_analysis/risk_scoring/telecom_group_monthly_all_with_preds.csv
+src/modules/data_analysis/risk_scoring/artifacts/
+src/modules/data_analysis/risk_scoring/artifacts_step4_A/
+src/modules/data_analysis/risk_scoring/artifacts_step4_B/
+src/modules/data_analysis/risk_scoring/artifacts_tuned/
+src/modules/data_analysis/risk_scoring/artifacts_tuned_A/
+src/modules/data_analysis/risk_scoring/artifacts_tuned_B/
+# allow this large CSV (LFS)
+!src/modules/data_analysis/risk_scoring/telecom_group_monthly_all_with_preds.csv
