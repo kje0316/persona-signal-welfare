@@ -367,7 +367,7 @@ export default function HomePage() {
         </CardContent>
       </Card>
 
-      {/* AI 데이터 증강 플랫폼 */}
+      {/* AI 데이터 증강 플랫폼 */
       <Card className="shadow-xl border-0 mb-16">
         <CardHeader className="text-center bg-gradient-to-r from-purple-50 to-blue-50 rounded-t-lg">
           <CardTitle className="text-3xl font-bold text-gray-800 mb-2">
@@ -417,9 +417,9 @@ export default function HomePage() {
 
       {/* 기존 페이지 연결 */}
       <div className="text-center mt-16 p-8 bg-gray-50 rounded-lg">
-        <h3 className="text-xl font-bold text-gray-800 mb-4">복지 서비스 이용하기</h3>
+        <h3 className="text-xl font-bold text-gray-800 mb-4">직접 검색하고 싶으시다면</h3>
         <p className="text-gray-600 mb-6">
-          1인가구 맞춤형 복지 서비스를 찾거나, 다양한 방식으로 상담받아보세요.
+          조건을 직접 선택하여 복지 서비스를 검색하거나, 단순 채팅 상담도 가능합니다.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/filter">

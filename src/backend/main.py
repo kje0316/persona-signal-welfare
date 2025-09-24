@@ -146,6 +146,7 @@ async def health_check():
 @app.post("/api/v1/upload/structured-data")
 async def upload_structured_data(file: UploadFile = File(...)):
     """정형 데이터 파일 업로드"""
+<<<<<<< HEAD
     return await upload_structured_data_handler(file)
 
 @app.post("/api/v1/data-aug/upload-structured")
@@ -154,6 +155,8 @@ async def upload_structured_data_legacy(file: UploadFile = File(...)):
     return await upload_structured_data_handler(file)
 
 async def upload_structured_data_handler(file: UploadFile):
+=======
+>>>>>>> origin/dev
     try:
         # 파일 확장자 검증
         if not file.filename.lower().endswith(('.csv', '.xlsx', '.xls')):
@@ -179,9 +182,17 @@ async def upload_structured_data_handler(file: UploadFile):
 
         return {
             "success": True,
+<<<<<<< HEAD
             "filename": file.filename,
             "file_path": str(saved_path),
             "size": len(content)
+=======
+            "file_id": file_id,
+            "filename": file.filename,
+            "size": len(content),
+            "file_path": str(saved_path),
+            "message": "정형 데이터 업로드 완료"
+>>>>>>> origin/dev
         }
 
     except Exception as e:
@@ -191,6 +202,7 @@ async def upload_structured_data_handler(file: UploadFile):
 @app.post("/api/v1/upload/knowledge-files")
 async def upload_knowledge_files(files: List[UploadFile] = File(...)):
     """도메인 지식 파일들 업로드"""
+<<<<<<< HEAD
     return await upload_knowledge_files_handler(files)
 
 @app.post("/api/v1/data-aug/upload-knowledge")
@@ -199,6 +211,8 @@ async def upload_knowledge_files_legacy(files: List[UploadFile] = File(...)):
     return await upload_knowledge_files_handler(files)
 
 async def upload_knowledge_files_handler(files: List[UploadFile]):
+=======
+>>>>>>> origin/dev
     try:
         upload_dir = Path(tempfile.gettempdir()) / "augmentation_uploads" / "knowledge"
         upload_dir.mkdir(parents=True, exist_ok=True)
@@ -239,6 +253,7 @@ async def upload_knowledge_files_handler(files: List[UploadFile]):
         raise HTTPException(status_code=500, detail=str(e))
 
 # 메인 데이터 증강 API
+<<<<<<< HEAD
 # UI 호환용 분석 시작 API
 @app.post("/api/v1/data-aug/start-analysis")
 async def start_data_augmentation_analysis(
@@ -250,6 +265,8 @@ async def start_data_augmentation_analysis(
     config = DataAugmentationRequest()  # 기본 설정 사용
     return await start_data_augmentation_handler(structured_file_path, knowledge_files, config, background_tasks)
 
+=======
+>>>>>>> origin/dev
 @app.post("/api/v1/augmentation/start", response_model=TaskResponse)
 async def start_data_augmentation(
     structured_file_path: str,
@@ -258,6 +275,7 @@ async def start_data_augmentation(
     background_tasks: BackgroundTasks
 ):
     """데이터 증강 파이프라인 시작"""
+<<<<<<< HEAD
     return await start_data_augmentation_handler(structured_file_path, knowledge_file_paths, config, background_tasks)
 
 async def start_data_augmentation_handler(
@@ -266,6 +284,8 @@ async def start_data_augmentation_handler(
     config: DataAugmentationRequest,
     background_tasks: BackgroundTasks
 ):
+=======
+>>>>>>> origin/dev
     try:
         # 파일 존재 확인
         if not Path(structured_file_path).exists():
@@ -427,6 +447,7 @@ async def run_augmentation_pipeline(
                 pass
 
 # 작업 상태 조회 및 관리
+<<<<<<< HEAD
 @app.get("/api/v1/data-aug/status/{task_id}")
 async def get_data_augmentation_status(task_id: str):
     """작업 상태 조회 (UI 호환용)"""
@@ -447,6 +468,11 @@ async def get_task_status(task_id: str):
     return await get_task_status_handler(task_id)
 
 async def get_task_status_handler(task_id: str) -> TaskStatusResponse:
+=======
+@app.get("/api/v1/augmentation/status/{task_id}", response_model=TaskStatusResponse)
+async def get_task_status(task_id: str):
+    """작업 상태 조회"""
+>>>>>>> origin/dev
     if task_id not in active_tasks:
         raise HTTPException(status_code=404, detail="작업을 찾을 수 없습니다")
 
