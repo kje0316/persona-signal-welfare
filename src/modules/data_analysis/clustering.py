@@ -1,285 +1,192 @@
+# src/modules/data_analysis/clustering.py
 # -*- coding: utf-8 -*-
 """
-clustering.py — 군집화 파이프라인 (K-sweep/안정성/커버리지/분리도/해석성)
+Clustering: 페르소나 군집화 모듈
+- (선택) per-capita + 월내 표준화 후 월평균으로 축약
+- K sweep (silhouette/CH/DB/최소비율) → 최적 K 선택
+- KMeans 학습 → 하드 라벨 + 소프트 확률(거리 기반 softmax)
+- 라벨 메타(중심/특징)와 함께 CSV로 저장
 """
 from __future__ import annotations
-
-import os
-import itertools
-import warnings
-from typing import List, Tuple, Dict
-from pathlib import Path
-
-import numpy as np
-import pandas as pd
-from joblib import dump as joblib_dump
-
+import numpy as np, pandas as pd, argparse, sys, warnings
+from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
-from sklearn.metrics import (
-    silhouette_score, calinski_harabasz_score, davies_bouldin_score,
-    adjusted_rand_score, normalized_mutual_info_score,
-)
+from sklearn.metrics import silhouette_score, calinski_harabasz_score, davies_bouldin_score
+warnings.filterwarnings("ignore")
 
-from preprocess import ensure_year_month, prepare_features
+from .eda import ensure_year_month, make_per_capita, monthwise_robust_z_log1p
 
-# ── SciPy small-sample 경고 무시 (ks_2samp 등) ───────────────────────────────
-try:
-    from scipy.stats._warnings import SmallSampleWarning  # type: ignore
-except Exception:
-    try:
-        from scipy.stats import SmallSampleWarning  # type: ignore
-    except Exception:
-        class SmallSampleWarning(Warning):
-            pass
+# ---------------- 전처리 ----------------
+def aggregate_by_unit_month(df: pd.DataFrame, unit_cols: list[str], month_col: str, use_cols: list[str]) -> pd.DataFrame:
+    """unit x month 수준에서 평균(또는 합계)로 축약. 여기선 평균 사용."""
+    keep = [c for c in use_cols if c in df.columns]
+    g = df.groupby(unit_cols + [month_col], dropna=False)[keep].mean().reset_index()
+    return g
 
-warnings.filterwarnings("ignore", category=SmallSampleWarning)
-warnings.filterwarnings("ignore", message="One or more sample arguments is too small")
+def month_to_overall(dfm: pd.DataFrame, unit_cols: list[str], month_col: str, use_cols: list[str]) -> pd.DataFrame:
+    """월 차원 제거(평균) → 최종 군집 입력 테이블"""
+    return dfm.groupby(unit_cols, dropna=False)[use_cols].mean().reset_index()
 
-# ── 한글 폰트 (mac 기본 폰트 우선) ───────────────────────────────────────────
-from matplotlib import font_manager, rcParams
+def k_sweep_score(X: np.ndarray, K_list: list[int]) -> pd.DataFrame:
+    rows=[]
+    for k in K_list:
+        if k <= 1 or k >= len(X):
+            continue
+        km = KMeans(n_clusters=k, n_init="auto", random_state=42)
+        lab = km.fit_predict(X)
+        # 빈 클러스터 방지 체크
+        counts = np.bincount(lab, minlength=k)
+        min_ratio = counts.min() / counts.sum()
+        # 지표
+        sil = silhouette_score(X, lab)
+        ch  = calinski_harabasz_score(X, lab)
+        db  = davies_bouldin_score(X, lab)
+        rows.append([k, sil, ch, db, float(min_ratio)])
+    return pd.DataFrame(rows, columns=["K","silhouette","calinski_harabasz","davies_bouldin","min_ratio"]).sort_values("silhouette", ascending=False)
 
-APPLE_SD_PATHS = [
-    "/System/Library/Fonts/AppleSDGothicNeo.ttc",
-    "/System/Library/Fonts/Supplemental/AppleGothic.ttf",
-]
+def soft_membership_from_dist(dists: np.ndarray, temperature: float=1.0) -> np.ndarray:
+    """
+    KMeans.transform으로 얻은 거리(d_ik) → '가까울수록 확률↑' 되도록 softmax(-d/T)
+    """
+    logits = -dists / max(1e-8, temperature)
+    logits -= logits.max(axis=1, keepdims=True)
+    probs = np.exp(logits); probs /= probs.sum(axis=1, keepdims=True)
+    return probs
 
-def use_korean_font():
-    for p, name in [
-        (APPLE_SD_PATHS[0], "Apple SD Gothic Neo"),
-        (APPLE_SD_PATHS[1], "AppleGothic"),
-    ]:
-        if os.path.exists(p):
-            try:
-                font_manager.fontManager.addfont(p)
-            except Exception:
-                pass
-            rcParams["font.family"] = name
-            rcParams["font.sans-serif"] = [name]
-            rcParams["axes.unicode_minus"] = False
-            return
-    rcParams["font.family"] = "DejaVu Sans"
-    rcParams["axes.unicode_minus"] = False
+# ---------------- 상위 API ----------------
+def persona_clustering(
+    df: pd.DataFrame,
+    unit_cols: list[str],
+    month_col: str="year_month",
+    one_col: str|None=None,
+    feature_cols: list[str]|None=None,
+    do_per_capita: bool=True,
+    do_month_std: bool=True,
+    K_list: list[int]|None=None,
+    pick_rule: str="best_silhouette",   # or "balance" (=silhouette 우선 + min_ratio 페널티)
+    temperature: float=1.0,
+):
+    """
+    반환:
+      labels_df: unit 키 + 하드라벨 + 소프트확률 컬럼
+      model_info: {centers, scaler_mean/scale, K, scores_table}
+    """
+    if K_list is None:
+        K_list = [3,4,5,6,7,8,9]
 
-use_korean_font()
+    df = ensure_year_month(df, month_col)
 
-# ── 하이퍼파라미터 ─────────────────────────────────────────────────────────
-QUALITY_EXCLUDE_MONTHS = [
-    pd.Timestamp("2024-06-01"),
-    pd.Timestamp("2024-08-01"),
-    pd.Timestamp("2024-09-01"),
-]
-K_RANGE = list(range(3, 13))
-SAMPLE_MAX = 120_000
-BOOT_ITERS = 10
-BOOT_SAMPLE_FRAC = 0.7
-HOLDOUT_START = pd.Timestamp("2024-07-01")
-RECENT_COVER_MONTHS = 12
-MIN_CLUSTER_RATIO = 0.03
-RANDOM_STATE = 42
+    # feature 선택
+    if feature_cols is None:
+        # 기본 후보(예시): 이동/디지털/통화/체류 등
+        candidates = [
+            "평일 총 이동 거리 합계",
+            "지하철이동일수 합계",
+            "배달 서비스 사용일수",
+            "동영상/방송 서비스 사용일수",
+            "평균 통화량",
+            "집 추정 위치 평일 총 체류시간",
+        ]
+        feature_cols = [c for c in candidates if c in df.columns]
 
+    # per-capita
+    work = df.copy()
+    if do_per_capita and one_col:
+        work = make_per_capita(work, feature_cols, one_col)
+        feature_cols = [c+"_pc" for c in feature_cols]
 
-# ── 함수들 ──────────────────────────────────────────────────────────────────
-def k_sweep(train_X: pd.DataFrame, train_month: pd.Series, k_list: List[int]) -> pd.DataFrame:
-    out = []
-    for K in k_list:
-        km = KMeans(n_clusters=K, random_state=RANDOM_STATE, n_init="auto")
-        labels = km.fit_predict(train_X)
-        sil = silhouette_score(train_X, labels)
-        ch = calinski_harabasz_score(train_X, labels)
-        db = davies_bouldin_score(train_X, labels)
+    # 월내 표준화
+    if do_month_std:
+        work = monthwise_robust_z_log1p(work, feature_cols, month_col)
+        feature_cols = [c+"_std" for c in feature_cols]
 
-        size_ratio = pd.Series(labels).value_counts(normalize=True)
-        recent_from = train_month.max() - pd.offsets.MonthBegin(RECENT_COVER_MONTHS - 1)
-        recent_mask = train_month >= recent_from
-        cov_ratio = (
-            len(pd.Series(labels[recent_mask.values]).value_counts()) / K
-            if recent_mask.any() else np.nan
-        )
+    # unit x month 축약 → unit 레벨 평균
+    dfm = aggregate_by_unit_month(work, unit_cols, month_col, feature_cols)
+    base = month_to_overall(dfm, unit_cols, month_col, feature_cols)
 
-        out.append({
-            "K": K,
-            "silhouette": sil,
-            "calinski_harabasz": ch,
-            "davies_bouldin": db,
-            "min_ratio": float(size_ratio.min()),
-            "recent_coverage": cov_ratio,
-        })
-    return pd.DataFrame(out).sort_values("silhouette", ascending=False)
+    # 스케일
+    scaler = StandardScaler()
+    X = scaler.fit_transform(base[feature_cols].fillna(0.0).values)
 
+    # K sweep
+    sweep = k_sweep_score(X, K_list)
+    if sweep.empty:
+        raise ValueError("K sweep 결과가 비었습니다. feature/표본 수를 확인하세요.")
 
-def stability_for_k(K: int, X: pd.DataFrame, months: pd.Series, iters: int = BOOT_ITERS) -> Dict[str, float]:
-    rng = np.random.RandomState(RANDOM_STATE)
-
-    base = KMeans(n_clusters=K, random_state=RANDOM_STATE, n_init="auto").fit(X)
-    val_idx = X.sample(min(len(X) // 2, 50_000), random_state=RANDOM_STATE).index
-    base_pred = base.predict(X.loc[val_idx])
-
-    ari_list, nmi_list = [], []
-    for _ in range(iters):
-        boot_idx = X.sample(frac=BOOT_SAMPLE_FRAC, replace=True, random_state=rng.randint(0, 10**9)).index
-        km = KMeans(n_clusters=K, random_state=rng.randint(0, 10**9), n_init="auto").fit(X.loc[boot_idx])
-        pred = km.predict(X.loc[val_idx])
-        ari_list.append(adjusted_rand_score(base_pred, pred))
-        nmi_list.append(normalized_mutual_info_score(base_pred, pred))
-
-    cut1 = HOLDOUT_START
-    mask_recent = months >= cut1
-    if mask_recent.any() and (~mask_recent).any():
-        km_past = KMeans(n_clusters=K, random_state=RANDOM_STATE, n_init="auto").fit(X.loc[~mask_recent])
-        lab_past = km_past.predict(X.loc[mask_recent])
-        km_all = KMeans(n_clusters=K, random_state=RANDOM_STATE, n_init="auto").fit(X)
-        lab_all = km_all.predict(X.loc[mask_recent])
-        ari_hold = adjusted_rand_score(lab_all, lab_past)
-        nmi_hold = normalized_mutual_info_score(lab_all, lab_past)
+    if pick_rule == "balance":
+        # silhouette 우선 + min_ratio(0.03 미만 패널티) 간단히 적용
+        sc = sweep.copy()
+        sc["score"] = sc["silhouette"] - (sc["min_ratio"] < 0.03) * 0.1
+        bestK = int(sc.sort_values(["score","silhouette"], ascending=False).iloc[0]["K"])
     else:
-        ari_hold = nmi_hold = np.nan
+        bestK = int(sweep.iloc[0]["K"])
 
-    return {
-        "ARI_boot_mean": float(np.mean(ari_list)),
-        "ARI_boot_std": float(np.std(ari_list)),
-        "NMI_boot_mean": float(np.mean(nmi_list)),
-        "NMI_boot_std": float(np.std(nmi_list)),
-        "ARI_holdout": float(ari_hold) if not np.isnan(ari_hold) else np.nan,
-        "NMI_holdout": float(nmi_hold) if not np.isnan(nmi_hold) else np.nan,
+    # 최종 학습
+    km = KMeans(n_clusters=bestK, n_init="auto", random_state=42)
+    labels = km.fit_predict(X)
+    dists  = km.transform(X)
+    probs  = soft_membership_from_dist(dists, temperature=temperature)  # (N, K)
+
+    # 결과 정리
+    out = base[unit_cols].copy()
+    out["persona_id"] = labels
+    for k in range(bestK):
+        out[f"persona_p{k}"] = probs[:,k]
+
+    model_info = {
+        "K": bestK,
+        "centers": km.cluster_centers_.tolist(),
+        "scaler_mean": scaler.mean_.tolist(),
+        "scaler_scale": scaler.scale_.tolist(),
+        "scores_table": sweep.to_dict(orient="list"),
+        "feature_cols": feature_cols,
     }
+    return out, model_info
 
+# ---------------- CLI ----------------
+def _build_argparser():
+    ap = argparse.ArgumentParser(description="페르소나 군집화 (KMeans, soft membership)")
+    ap.add_argument("--csv_path", default="telecom_group_monthly_all.csv")
+    ap.add_argument("--unit_cols", default="자치구,행정동,성별,연령대")
+    ap.add_argument("--month_col", default="year_month")
+    ap.add_argument("--one_col", default="1인가구수")
+    ap.add_argument("--features", default="")  # 콤마구분. 비우면 기본 후보 자동 선택
+    ap.add_argument("--no_per_capita", action="store_true")
+    ap.add_argument("--no_month_std", action="store_true")
+    ap.add_argument("--K_list", default="3,4,5,6,7,8,9")
+    ap.add_argument("--pick_rule", default="best_silhouette", choices=["best_silhouette","balance"])
+    ap.add_argument("--temperature", type=float, default=1.0)
+    ap.add_argument("--out_csv", default="persona_labels.csv")
+    ap.add_argument("--out_info_json", default=None)
+    return ap
 
-def size_coverage_report(train_X: pd.DataFrame, train_month: pd.Series, K: int) -> Tuple[pd.Series, np.ndarray]:
-    km = KMeans(n_clusters=K, random_state=RANDOM_STATE, n_init="auto").fit(train_X)
-    labels = km.labels_
-    size = pd.Series(labels).value_counts(normalize=True).sort_index()
+def main():
+    import json
+    args = _build_argparser().parse_args()
+    df = pd.read_csv(args.csv_path)
+    unit_cols = [c for c in args.unit_cols.split(",") if c]
+    feature_cols = [c for c in args.features.split(",") if c] if args.features else None
+    K_list = [int(k) for k in args.K_list.split(",") if k]
 
-    recent_from = train_month.max() - pd.offsets.MonthBegin(RECENT_COVER_MONTHS - 1)
-    denom = pd.Index(pd.period_range(recent_from, train_month.max(), freq="M")).to_timestamp()
+    labels_df, info = persona_clustering(
+        df=df,
+        unit_cols=unit_cols,
+        month_col=args.month_col,
+        one_col=None if args.no_per_capita else args.one_col,
+        feature_cols=feature_cols,
+        do_per_capita=not args.no_per_capita and bool(args.one_col),
+        do_month_std=not args.no_month_std,
+        K_list=K_list,
+        pick_rule=args.pick_rule,
+        temperature=args.temperature,
+    )
+    labels_df.to_csv(args.out_csv, index=False, encoding="utf-8-sig")
+    print(f"✅ 라벨 저장: {args.out_csv} (rows={len(labels_df)})")
 
-    cover = []
-    for k in range(K):
-        months_k = train_month[labels == k].unique()
-        cover.append(np.mean(denom.isin(months_k)))
-    return size, np.array(cover)
+    if args.out_info_json:
+        with open(args.out_info_json, "w", encoding="utf-8") as f:
+            json.dump(info, f, ensure_ascii=False, indent=2)
+        print(f"✅ 모델 정보 저장: {args.out_info_json}")
 
-
-def separability_table(train_X: pd.DataFrame, labels: np.ndarray) -> pd.DataFrame:
-    km = KMeans(n_clusters=len(np.unique(labels)), random_state=RANDOM_STATE, n_init="auto").fit(train_X)
-    centers = pd.DataFrame(km.cluster_centers_, columns=train_X.columns)
-
-    within_std = pd.DataFrame(index=sorted(np.unique(labels)), columns=train_X.columns)
-    for k in sorted(np.unique(labels)):
-        within_std.loc[k] = train_X[labels == k].std(ddof=0)
-
-    pairs = []
-    for a, b in itertools.combinations(sorted(np.unique(labels)), 2):
-        dist = np.linalg.norm(centers.loc[a] - centers.loc[b])
-        w = np.linalg.norm((within_std.loc[a] + within_std.loc[b]) / 2)
-        pairs.append((a, b, dist / (w if w > 0 else 1e-6)))
-    return pd.DataFrame(pairs, columns=["c1", "c2", "d_like"]).sort_values("d_like", ascending=False)
-
-
-def run_clustering_pipeline(csv_path: str, exclude_months=None, k_range=K_RANGE):
-    exclude_months = exclude_months if exclude_months is not None else QUALITY_EXCLUDE_MONTHS
-
-    df = pd.read_csv(csv_path)
-    df = ensure_year_month(df)
-    if exclude_months:
-        df = df[~df["year_month"].isin(exclude_months)].copy()
-
-    df_norm, norm_cols = prepare_features(df)
-    X = df_norm[norm_cols].replace([np.inf, -np.inf], np.nan).dropna()
-    months = df_norm.loc[X.index, "year_month"]
-
-    if len(X) > SAMPLE_MAX:
-        X = X.sample(SAMPLE_MAX, random_state=RANDOM_STATE)
-        months = months.loc[X.index]
-
-    k_table = k_sweep(X, months, k_range)
-    print("\n[K sweep 결과(상위 silhouette 순)]")
-    print(k_table.head(10))
-
-    topK = k_table.sort_values("silhouette", ascending=False).head(3)["K"].tolist()
-    stab_rows = []
-    for K in topK:
-        s = stability_for_k(K, X, months, BOOT_ITERS)
-        s["K"] = K
-        stab_rows.append(s)
-    stab_table = pd.DataFrame(stab_rows).set_index("K")
-    print("\n[안정성(bootstrap/홀드아웃) 요약]")
-    print(stab_table)
-
-    K_pick = topK[0] if topK else k_range[0]
-    size_ratio, cover_arr = size_coverage_report(X, months, K_pick)
-    print(f"\n[크기/커버리지] K={K_pick}")
-    print("클러스터 비중:", size_ratio.round(4).to_dict())
-    print("최근 커버리지:", {i: round(float(v), 3) for i, v in enumerate(cover_arr)})
-
-    km_pick = KMeans(n_clusters=K_pick, random_state=RANDOM_STATE, n_init="auto").fit(X)
-    labels = km_pick.labels_
-    sep_tbl = separability_table(X, labels)
-    print("\n[분리도 상위 페어(d'-like)]")
-    print(sep_tbl.head(10))
-
-    row = k_table[k_table["K"] == K_pick].iloc[0]
-    summary = {
-        "K": K_pick,
-        "silhouette_ok": bool(row["silhouette"] >= 0.25),
-        "min_ratio_ok": bool(float(size_ratio.min()) >= MIN_CLUSTER_RATIO),
-        "coverage_ok": bool((cover_arr > 0).all()),
-        "stability_ok": bool(K_pick in stab_table.index and stab_table.loc[K_pick, "ARI_boot_mean"] >= 0.6),
-        "holdout_ok": bool(
-            (K_pick in stab_table.index)
-            and (np.isnan(stab_table.loc[K_pick, "ARI_holdout"]) or stab_table.loc[K_pick, "ARI_holdout"] >= 0.6)
-        ),
-    }
-    print("\n[합격선 체크 요약]")
-    for k, v in summary.items():
-        print(f"- {k}: {v}")
-
-    return {
-        "k_table": k_table,
-        "stab_table": stab_table,
-        "K_pick": K_pick,
-        "labels": labels,
-        "model": km_pick,
-        "size_ratio": size_ratio,
-        "cover_arr": cover_arr,
-        "sep_table": sep_tbl,
-        "summary": summary,
-        "features": norm_cols,
-        "X_index": X.index,
-        "months": months,  # 저장 편의를 위해 포함
-    }
-
-
-# ── CLI ────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
-    import argparse
-
-    p = argparse.ArgumentParser(description="Clustering pipeline")
-    p.add_argument("--csv", default="telecom_group_monthly_all.csv")
-    p.add_argument("--no-exclude", action="store_true", help="품질 이슈 월 제외하지 않음")
-    p.add_argument("--kmin", type=int, default=3)
-    p.add_argument("--kmax", type=int, default=12)
-    # 저장 옵션 추가
-    p.add_argument("--save-labels", type=str, default=None, help="클러스터 라벨 CSV 저장 경로")
-    p.add_argument("--save-model", type=str, default=None, help="KMeans 모델 joblib 저장 경로")
-    args = p.parse_args()
-
-    exclude = [] if args.no_exclude else QUALITY_EXCLUDE_MONTHS
-    res = run_clustering_pipeline(args.csv, exclude, list(range(args.kmin, args.kmax + 1)))
-
-    # 라벨 저장 (샘플링이 적용된 경우, 해당 샘플 행만 저장됨)
-    if args.save_labels:
-        out_path = Path(args.save_labels)
-        out_path.parent.mkdir(parents=True, exist_ok=True)
-        df_lab = pd.DataFrame(index=res["X_index"])
-        df_lab["cluster"] = res["labels"]
-        df_lab["year_month"] = pd.to_datetime(res["months"]).dt.strftime("%Y-%m-%d")
-        df_lab["K"] = res["K_pick"]
-        df_lab.reset_index(names="row_id").to_csv(out_path, index=False)
-        print(f"\n[저장] 라벨 → {out_path}")
-
-    # 모델 저장
-    if args.save_model:
-        out_path = Path(args.save_model)
-        out_path.parent.mkdir(parents=True, exist_ok=True)
-        joblib_dump(res["model"], out_path)
-        print(f"[저장] 모델 → {out_path}")
+    main()
