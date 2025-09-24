@@ -179,7 +179,6 @@ export default function AugmentationPage() {
 
     try {
       const requestBody = {
-        structured_file_path: structuredFileId,
         knowledge_file_paths: knowledgeFilePaths,
         config: {
           scenario: "normal",
@@ -190,7 +189,10 @@ export default function AugmentationPage() {
         }
       }
 
-      const response = await fetch(`${API_URL}/api/v1/augmentation/start`, {
+      // structured_file_path를 query parameter로 추가
+      const url = `${API_URL}/api/v1/augmentation/start?structured_file_path=${encodeURIComponent(structuredFileId)}`
+
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
