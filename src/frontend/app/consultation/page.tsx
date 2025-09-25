@@ -18,21 +18,45 @@ interface Message {
 interface PreConsultationData {
   gender: string
   age: string
-  situation: string
+  region: string
   income: string
+  targetGroup: string
+  household: string
+  housing: string
   timestamp: string
 }
 
 interface WelfareService {
-  serviceId: string
-  serviceName: string
+  service_id: string
+  service_name: string
+  service_type: string
+  service_summary: string
+  detailed_link: string
+  managing_agency: string
+  region_sido: string
+  region_sigungu: string
   department: string
-  overview: string
-  targetDetails: string
-  selectionCriteria: string
-  supportContent: string
-  supportCycle: string
-  paymentMethod: string
+  contact_phone: string
+  contact_email: string
+  address: string
+  support_target: string
+  selection_criteria: string
+  support_content: string
+  support_cycle: string
+  payment_method: string
+  application_method: string
+  required_documents: string
+  category: string
+  life_cycle: string
+  target_characteristics: string
+  interest_topics: string
+  service_status: string
+  start_date: string
+  end_date: string
+  view_count: number
+  last_updated: string
+  created_at: string
+  updated_at: string
 }
 
 // 위험도 평가 레벨
@@ -54,6 +78,8 @@ export default function ConsultationPage() {
   const [recommendedServices, setRecommendedServices] = useState<WelfareService[]>([])
   const [riskAssessment, setRiskAssessment] = useState<RiskAssessment | null>(null)
   const [chatTurnCount, setChatTurnCount] = useState(0)
+  const [isLoadingServices, setIsLoadingServices] = useState(false)
+  const [servicesError, setServicesError] = useState<string | null>(null)
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -97,35 +123,79 @@ export default function ConsultationPage() {
   // 초기 AI 메시지 생성
   const generateInitialMessage = (data: PreConsultationData): string => {
     const genderText = data.gender === 'male' ? '남성' : '여성'
-    const ageText = {
-      'teen': '10-20대',
-      'young': '30대',
-      'middle': '40-50대',
-      'senior': '60대 이상'
-    }[data.age]
 
-    const situationText = {
-      'employment': '취업/일자리',
-      'housing': '주거/월세',
-      'medical': '의료/건강',
-      'childcare': '임신/육아',
-      'education': '교육/학비',
-      'emergency': '긴급/위험상황'
-    }[data.situation]
+    const ageText = {
+      'child': '아동·청소년 (18세 이하)',
+      'youth': '청년 (19-39세)',
+      'middle': '중장년 (40-64세)',
+      'senior': '노인 (65세 이상)',
+      'all': '연령 무관'
+    }[data.age] || data.age
+
+    const regionText = {
+      'seoul': '서울특별시',
+      'busan': '부산광역시',
+      'daegu': '대구광역시',
+      'incheon': '인천광역시',
+      'gwangju': '광주광역시',
+      'daejeon': '대전광역시',
+      'ulsan': '울산광역시',
+      'sejong': '세종특별자치시',
+      'gyeonggi': '경기도',
+      'gangwon': '강원도',
+      'chungbuk': '충청북도',
+      'chungnam': '충청남도',
+      'jeonbuk': '전라북도',
+      'jeonnam': '전라남도',
+      'gyeongbuk': '경상북도',
+      'gyeongnam': '경상남도',
+      'jeju': '제주특별자치도'
+    }[data.region] || data.region
+
+    const targetGroupText = {
+      'general': '일반',
+      'single_parent': '한부모 가정',
+      'disability': '장애인',
+      'veteran': '국가유공자',
+      'multi_child': '다자녀 가정',
+      'multicultural': '다문화 가정'
+    }[data.targetGroup] || data.targetGroup
+
+    const householdText = {
+      'single': '1인 가구',
+      'couple': '2인 가구',
+      'family_3': '3인 가구',
+      'family_4_plus': '4인 이상 가구'
+    }[data.household] || data.household
+
+    const housingText = {
+      'homeless': '무주택자',
+      'monthly_rent': '월세 거주',
+      'jeonse': '전세 거주',
+      'rental': '임대주택 거주',
+      'owned': '자가 소유',
+      'all': '주거형태 무관',
+      'unknown': '기타'
+    }[data.housing] || data.housing
 
     return `안녕하세요! 복지 상담 AI입니다.
 
 입력해주신 정보를 확인했습니다:
-👤 ${genderText}, ${ageText}
-🎯 주요 관심분야: ${situationText}
+👤 성별: ${genderText}
+🎂 연령: ${ageText}
+📍 거주지역: ${regionText}
 💰 소득수준: ${getIncomeText(data.income)}
+👥 대상유형: ${targetGroupText}
+🏠 가구형태: ${householdText}
+🏡 주거상황: ${housingText}
 
-먼저 ${situationText} 관련해서 몇 가지 질문을 드리겠습니다. 더 정확한 상담을 위해 현재 상황을 좀 더 자세히 알려주세요.
+입력해주신 조건에 맞는 복지 서비스를 찾아드렸습니다. 더 정확한 맞춤형 추천을 위해 현재 상황을 좀 더 자세히 알려주세요.
 
 예를 들어:
-- 구체적으로 어떤 어려움을 겪고 계신가요?
-- 현재 가족 구성은 어떻게 되시나요?
-- 이전에 받아본 복지 서비스가 있으신가요?
+- 현재 가장 큰 어려움이나 필요한 도움이 무엇인가요?
+- 구체적인 가족 구성원이나 부양가족이 있으신가요?
+- 이전에 받아본 복지 서비스나 지원이 있으신가요?
+- 건강상 문제나 특별한 상황이 있으신가요?
 
 편안하게 말씀해 주세요!`
   }
@@ -141,46 +211,45 @@ export default function ConsultationPage() {
     return incomeMap[income as keyof typeof incomeMap] || income
   }
 
-  // 1차 필터링 서비스 로드
+  // 1차 필터링 서비스 로드 - 백엔드 API 사용
   const loadRecommendedServices = async (data: PreConsultationData) => {
+    setIsLoadingServices(true)
+    setServicesError(null)
+
     try {
-      const response = await fetch('/welfare_data.json')
-      const welfareData = await response.json()
+      // 백엔드 API 엔드포인트 구성
+      const queryParams = new URLSearchParams({
+        gender: data.gender,
+        age: data.age,
+        region: data.region,
+        income: data.income,
+        targetGroup: data.targetGroup,
+        household: data.household,
+        housing: data.housing,
+        limit: '20', // 더 많은 서비스 가져오기
+        offset: '0'
+      })
 
-      // 기본 필터링 로직 (간단한 키워드 매칭)
-      const services = Object.values(welfareData.services) as any[]
-      const filtered = services.filter(service => {
-        const content = `${service.original.서비스명} ${service.original.서비스개요} ${service.original.지원대상상세}`.toLowerCase()
+      const response = await fetch(`http://localhost:8001/welfare-services?${queryParams.toString()}`)
 
-        // 상황별 키워드 매칭
-        const situationKeywords = {
-          'employment': ['취업', '일자리', '구직', '직업', '고용'],
-          'housing': ['주거', '월세', '임대', '주택', '거주'],
-          'medical': ['의료', '건강', '치료', '병원', '질환'],
-          'childcare': ['임신', '출산', '육아', '돌봄', '아이'],
-          'education': ['교육', '학비', '등록금', '학생', '수업료'],
-          'emergency': ['긴급', '위기', '응급', '지원']
-        }
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
 
-        const keywords = situationKeywords[data.situation as keyof typeof situationKeywords] || []
-        return keywords.some(keyword => content.includes(keyword))
-      }).slice(0, 8) // 상위 8개만
+      const result = await response.json()
+      console.log('백엔드에서 가져온 복지 서비스:', result.total, '개')
 
-      const formattedServices: WelfareService[] = filtered.map(service => ({
-        serviceId: service.original.서비스ID,
-        serviceName: service.original.서비스명,
-        department: service.original.소관부처,
-        overview: service.original.서비스개요,
-        targetDetails: service.original.지원대상상세,
-        selectionCriteria: service.original.선정기준,
-        supportContent: service.original.지원내용,
-        supportCycle: service.original.지원주기,
-        paymentMethod: service.original.지급방식
-      }))
+      setRecommendedServices(result.services || [])
 
-      setRecommendedServices(formattedServices)
+      if (result.total === 0) {
+        setServicesError('입력하신 조건에 정확히 일치하는 서비스를 찾을 수 없습니다. AI 상담을 통해 더 넓은 범위의 서비스를 추천받아보세요.')
+      }
     } catch (error) {
-      console.error('복지 데이터 로딩 오류:', error)
+      console.error('백엔드 API 오류:', error)
+      setServicesError('복지 서비스 데이터를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.')
+      setRecommendedServices([])
+    } finally {
+      setIsLoadingServices(false)
     }
   }
 
@@ -405,6 +474,8 @@ export default function ConsultationPage() {
             preData={preData}
             recommendedServices={recommendedServices}
             onStartChat={() => setCurrentPhase('chat')}
+            isLoadingServices={isLoadingServices}
+            servicesError={servicesError}
           />
         )}
 
@@ -438,11 +509,15 @@ export default function ConsultationPage() {
 function PreviewPhase({
   preData,
   recommendedServices,
-  onStartChat
+  onStartChat,
+  isLoadingServices,
+  servicesError
 }: {
   preData: PreConsultationData
   recommendedServices: WelfareService[]
   onStartChat: () => void
+  isLoadingServices: boolean
+  servicesError: string | null
 }) {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -452,27 +527,99 @@ function PreviewPhase({
           <CardTitle>📋 입력하신 정보</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-4 bg-blue-50 rounded-lg">
-              <div className="text-sm text-gray-600">성별</div>
-              <div className="font-semibold">{preData.gender === 'male' ? '남성' : '여성'}</div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="text-center p-3 bg-blue-50 rounded-lg">
+              <div className="text-xs text-gray-600">성별</div>
+              <div className="font-semibold text-sm">{preData.gender === 'male' ? '남성' : '여성'}</div>
             </div>
-            <div className="text-center p-4 bg-green-50 rounded-lg">
-              <div className="text-sm text-gray-600">연령대</div>
-              <div className="font-semibold">
-                {{'teen': '10-20대', 'young': '30대', 'middle': '40-50대', 'senior': '60대 이상'}[preData.age]}
+            <div className="text-center p-3 bg-green-50 rounded-lg">
+              <div className="text-xs text-gray-600">연령대</div>
+              <div className="font-semibold text-sm">
+                {{
+                  'child': '아동·청소년',
+                  'youth': '청년',
+                  'middle': '중장년',
+                  'senior': '노인',
+                  'all': '연령 무관'
+                }[preData.age] || preData.age}
               </div>
             </div>
-            <div className="text-center p-4 bg-purple-50 rounded-lg">
-              <div className="text-sm text-gray-600">주요 상황</div>
-              <div className="font-semibold">
-                {{'employment': '취업/일자리', 'housing': '주거/월세', 'medical': '의료/건강', 'childcare': '임신/육아', 'education': '교육/학비', 'emergency': '긴급/위험상황'}[preData.situation]}
+            <div className="text-center p-3 bg-purple-50 rounded-lg">
+              <div className="text-xs text-gray-600">거주지역</div>
+              <div className="font-semibold text-sm">
+                {{
+                  'seoul': '서울',
+                  'busan': '부산',
+                  'daegu': '대구',
+                  'incheon': '인천',
+                  'gwangju': '광주',
+                  'daejeon': '대전',
+                  'ulsan': '울산',
+                  'sejong': '세종',
+                  'gyeonggi': '경기도',
+                  'gangwon': '강원도',
+                  'chungbuk': '충북',
+                  'chungnam': '충남',
+                  'jeonbuk': '전북',
+                  'jeonnam': '전남',
+                  'gyeongbuk': '경북',
+                  'gyeongnam': '경남',
+                  'jeju': '제주'
+                }[preData.region] || preData.region}
               </div>
             </div>
-            <div className="text-center p-4 bg-orange-50 rounded-lg">
-              <div className="text-sm text-gray-600">소득 수준</div>
-              <div className="font-semibold">
-                {{'low': '150만원 이하', 'middle-low': '150-300만원', 'middle': '300-500만원', 'high': '500만원 이상'}[preData.income]}
+            <div className="text-center p-3 bg-orange-50 rounded-lg">
+              <div className="text-xs text-gray-600">소득 수준</div>
+              <div className="font-semibold text-sm">
+                {{
+                  'basic_recipient': '기초생활수급자',
+                  'near_poor': '차상위계층',
+                  'median_100': '중위소득 100%↓',
+                  'median_150': '중위소득 150%↓',
+                  'all': '소득 무관',
+                  'unknown': '기타'
+                }[preData.income] || preData.income}
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-3 mt-3">
+            <div className="text-center p-3 bg-pink-50 rounded-lg">
+              <div className="text-xs text-gray-600">대상유형</div>
+              <div className="font-semibold text-sm">
+                {{
+                  'general': '일반',
+                  'single_parent': '한부모',
+                  'disability': '장애인',
+                  'veteran': '국가유공자',
+                  'multi_child': '다자녀',
+                  'multicultural': '다문화'
+                }[preData.targetGroup] || preData.targetGroup}
+              </div>
+            </div>
+            <div className="text-center p-3 bg-cyan-50 rounded-lg">
+              <div className="text-xs text-gray-600">가구형태</div>
+              <div className="font-semibold text-sm">
+                {{
+                  'single': '1인',
+                  'couple': '2인',
+                  'family_3': '3인',
+                  'family_4_plus': '4인+'
+                }[preData.household] || preData.household}
+              </div>
+            </div>
+            <div className="text-center p-3 bg-yellow-50 rounded-lg">
+              <div className="text-xs text-gray-600">주거상황</div>
+              <div className="font-semibold text-sm">
+                {{
+                  'homeless': '무주택',
+                  'monthly_rent': '월세',
+                  'jeonse': '전세',
+                  'rental': '임대',
+                  'owned': '자가',
+                  'all': '무관',
+                  'unknown': '기타'
+                }[preData.housing] || preData.housing}
               </div>
             </div>
           </div>
@@ -489,15 +636,41 @@ function PreviewPhase({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid md:grid-cols-2 gap-4 mb-6">
-            {recommendedServices.slice(0, 4).map((service, index) => (
-              <div key={service.serviceId} className="p-4 border rounded-lg hover:shadow-md transition-shadow">
-                <h4 className="font-semibold text-gray-800 mb-2">{service.serviceName}</h4>
-                <p className="text-sm text-gray-600 mb-2">{service.department}</p>
-                <p className="text-sm text-gray-700 line-clamp-2">{service.overview}</p>
+          {isLoadingServices ? (
+            <div className="flex items-center justify-center p-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mr-4"></div>
+              <span className="text-gray-600">복지 서비스를 검색하고 있습니다...</span>
+            </div>
+          ) : servicesError ? (
+            <div className="p-6 bg-yellow-50 border border-yellow-200 rounded-lg mb-6">
+              <div className="flex items-center mb-2">
+                <AlertTriangle className="w-5 h-5 text-yellow-600 mr-2" />
+                <span className="font-medium text-yellow-800">알림</span>
               </div>
-            ))}
-          </div>
+              <p className="text-yellow-700">{servicesError}</p>
+            </div>
+          ) : recommendedServices.length > 0 ? (
+            <div className="grid md:grid-cols-2 gap-4 mb-6">
+              {recommendedServices.slice(0, 4).map((service, index) => (
+                <div key={service.service_id} className="p-4 border rounded-lg hover:shadow-md transition-shadow">
+                  <h4 className="font-semibold text-gray-800 mb-2">{service.service_name}</h4>
+                  <p className="text-sm text-gray-600 mb-2">{service.managing_agency || service.department}</p>
+                  <p className="text-sm text-gray-700 line-clamp-2">{service.service_summary}</p>
+                  <div className="flex items-center gap-2 mt-2">
+                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                      {service.service_type === 'government' ? '중앙부처' :
+                       service.service_type === 'local' ? '지자체' : '민간'}
+                    </span>
+                    {service.category && (
+                      <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
+                        {service.category}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : null}
 
           <div className="text-center">
             <Button onClick={onStartChat} size="lg" className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700">
@@ -698,33 +871,77 @@ function ResultsPhase({
         <CardContent>
           <div className="grid gap-4">
             {recommendedServices.map((service, index) => (
-              <div key={service.serviceId} className="p-6 border rounded-lg hover:shadow-md transition-shadow">
+              <div key={service.service_id} className="p-6 border rounded-lg hover:shadow-md transition-shadow">
                 <div className="flex items-start justify-between mb-3">
                   <div>
-                    <h4 className="text-lg font-semibold text-gray-800 mb-1">{service.serviceName}</h4>
-                    <p className="text-sm text-gray-600">{service.department}</p>
+                    <h4 className="text-lg font-semibold text-gray-800 mb-1">{service.service_name}</h4>
+                    <p className="text-sm text-gray-600">{service.managing_agency || service.department}</p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <Badge variant={service.service_type === 'government' ? 'default' : 'secondary'}>
+                        {service.service_type === 'government' ? '중앙부처' :
+                         service.service_type === 'local' ? '지자체' : '민간'}
+                      </Badge>
+                      {service.category && (
+                        <Badge variant="outline">{service.category}</Badge>
+                      )}
+                    </div>
                   </div>
-                  <Badge variant="outline">{service.paymentMethod}</Badge>
+                  {service.payment_method && (
+                    <Badge variant="outline">{service.payment_method}</Badge>
+                  )}
                 </div>
 
-                <p className="text-gray-700 mb-4">{service.overview}</p>
+                <p className="text-gray-700 mb-4">{service.service_summary}</p>
 
                 <div className="grid md:grid-cols-2 gap-4 text-sm">
                   <div>
                     <span className="font-medium text-blue-600">지원대상:</span>
-                    <p className="text-gray-600 mt-1 line-clamp-2">{service.targetDetails}</p>
+                    <p className="text-gray-600 mt-1 line-clamp-2">{service.support_target || '자세한 내용은 문의 바랍니다'}</p>
                   </div>
                   <div>
                     <span className="font-medium text-green-600">지원내용:</span>
-                    <p className="text-gray-600 mt-1 line-clamp-2">{service.supportContent}</p>
+                    <p className="text-gray-600 mt-1 line-clamp-2">{service.support_content || '자세한 내용은 문의 바랍니다'}</p>
                   </div>
                 </div>
 
+                {(service.selection_criteria || service.application_method) && (
+                  <div className="grid md:grid-cols-2 gap-4 text-sm mt-3">
+                    {service.selection_criteria && (
+                      <div>
+                        <span className="font-medium text-purple-600">선정기준:</span>
+                        <p className="text-gray-600 mt-1 line-clamp-2">{service.selection_criteria}</p>
+                      </div>
+                    )}
+                    {service.application_method && (
+                      <div>
+                        <span className="font-medium text-orange-600">신청방법:</span>
+                        <p className="text-gray-600 mt-1 line-clamp-2">{service.application_method}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 <div className="mt-4 flex items-center justify-between">
-                  <span className="text-xs text-gray-500">지원주기: {service.supportCycle}</span>
-                  <Button size="sm" variant="outline">
-                    신청 방법 확인
-                  </Button>
+                  <div className="flex items-center gap-4">
+                    {service.support_cycle && (
+                      <span className="text-xs text-gray-500">지원주기: {service.support_cycle}</span>
+                    )}
+                    {service.view_count > 0 && (
+                      <span className="text-xs text-gray-500">조회수: {service.view_count}회</span>
+                    )}
+                  </div>
+                  <div className="flex gap-2">
+                    {service.detailed_link && (
+                      <Button size="sm" variant="outline" asChild>
+                        <a href={service.detailed_link} target="_blank" rel="noopener noreferrer">
+                          상세보기
+                        </a>
+                      </Button>
+                    )}
+                    <Button size="sm" variant="outline">
+                      신청 방법 확인
+                    </Button>
+                  </div>
                 </div>
               </div>
             ))}
