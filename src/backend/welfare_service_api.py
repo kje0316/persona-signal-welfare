@@ -12,6 +12,12 @@ from psycopg2.extras import RealDictCursor
 import json
 from datetime import datetime
 
+# 챗봇 서비스 임포트
+try:
+    from .chatbot_service import welfare_chatbot, ChatMessage, UserProfile
+except ImportError:
+    from chatbot_service import welfare_chatbot, ChatMessage, UserProfile
+
 # 데이터베이스 연결 정보
 DB_CONFIG = {
     'host': 'seoul-ht-11.cpk0oamsu0g6.us-west-1.rds.amazonaws.com',
@@ -84,6 +90,16 @@ class ServiceResponse(BaseModel):
     total: int
     services: List[WelfareService]
     filters_applied: Dict[str, Any]
+
+# 챗봇 관련 모델
+class ChatRequest(BaseModel):
+    message: str
+    user_profile: UserProfile
+    conversation_history: List[ChatMessage]
+
+class ChatResponse(BaseModel):
+    response: str
+    timestamp: datetime
 
 # 데이터베이스 연결 헬퍼
 def get_db_connection():
@@ -407,6 +423,58 @@ async def get_welfare_statistics():
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+
+@app.post("/api/v1/chat", response_model=ChatResponse, tags=["Chatbot"])
+async def chat_with_ai(request: ChatRequest):
+    """AWS Bedrock Claude를 사용한 복지 상담 챗봇"""
+    try:
+        # 사용자 메시지를 대화 히스토리에 추가
+        all_messages = request.conversation_history + [
+            ChatMessage(role="user", content=request.message)
+        ]
+
+        # AI 응답 생성
+        ai_response = welfare_chatbot.chat_with_bedrock(
+            messages=all_messages,
+            user_profile=request.user_profile
+        )
+
+        return ChatResponse(
+            response=ai_response,
+            timestamp=datetime.now()
+        )
+
+    except Exception as e:
+        # 오류 발생 시 폴백 응답
+        print(f"챗봇 오류: {e}")
+        fallback_response = """죄송합니다. 일시적으로 상담 서비스에 문제가 발생했습니다.
+
+다음 방법으로 도움받으실 수 있습니다:
+📞 다산콜센터: 120 (무료)
+🏢 거주지 주민센터 방문 상담
+🌐 복지로 온라인: www.bokjiro.go.kr
+
+잠시 후 다시 시도해주세요."""
+
+        return ChatResponse(
+            response=fallback_response,
+            timestamp=datetime.now()
+        )
+
+@app.post("/api/v1/chat/recommend", tags=["Chatbot"])
+async def get_personalized_recommendations(user_profile: UserProfile, keywords: Optional[List[str]] = None):
+    """사용자 맞춤형 복지 서비스 추천"""
+    try:
+        services = welfare_chatbot.search_welfare_services(user_profile, keywords or [])
+
+        return {
+            "total": len(services),
+            "services": services,
+            "user_profile": user_profile.dict()
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"추천 서비스 오류: {str(e)}")
 
 if __name__ == "__main__":
     import uvicorn

@@ -178,26 +178,22 @@ export default function ConsultationPage() {
       'unknown': '기타'
     }[data.housing] || data.housing
 
-    return `안녕하세요! 복지 상담 AI입니다.
+    return `안녕하세요! 복지 전문 상담사 AI입니다. 😊
 
-입력해주신 정보를 확인했습니다:
-👤 성별: ${genderText}
-🎂 연령: ${ageText}
-📍 거주지역: ${regionText}
-💰 소득수준: ${getIncomeText(data.income)}
-👥 대상유형: ${targetGroupText}
-🏠 가구형태: ${householdText}
-🏡 주거상황: ${housingText}
+먼저 입력해주신 기본 정보를 정리해보았습니다:
+👤 ${genderText} · 🎂 ${ageText} · 📍 ${regionText}
+💰 ${getIncomeText(data.income)} · 👥 ${targetGroupText}
+🏠 ${householdText} · 🏡 ${housingText}
 
-입력해주신 조건에 맞는 복지 서비스를 찾아드렸습니다. 더 정확한 맞춤형 추천을 위해 현재 상황을 좀 더 자세히 알려주세요.
+기본 조건으로 찾은 복지 서비스들이 있지만, 더욱 정확하고 도움이 되는 추천을 드리고 싶습니다.
 
-예를 들어:
-- 현재 가장 큰 어려움이나 필요한 도움이 무엇인가요?
-- 구체적인 가족 구성원이나 부양가족이 있으신가요?
-- 이전에 받아본 복지 서비스나 지원이 있으신가요?
-- 건강상 문제나 특별한 상황이 있으신가요?
+현재 상황을 자세히 말씀해 주세요:
+✅ 지금 가장 어려운 점이나 긴급한 도움이 필요한 부분
+✅ 함께 사는 가족이나 돌봐야 할 분이 있는지
+✅ 건강, 일자리, 주거 등 특별한 상황
+✅ 이전에 받아본 복지 혜택이나 신청 경험
 
-편안하게 말씀해 주세요!`
+어떤 내용이든 편하게 말씀해 주세요. 차근차근 도와드리겠습니다! 💪`
   }
 
   // 소득 텍스트 변환
@@ -230,7 +226,7 @@ export default function ConsultationPage() {
         offset: '0'
       })
 
-      const response = await fetch(`http://localhost:8001/welfare-services?${queryParams.toString()}`)
+      const response = await fetch(`http://54.183.202.72:8001/welfare-services?${queryParams.toString()}`)
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
@@ -253,9 +249,9 @@ export default function ConsultationPage() {
     }
   }
 
-  // 메시지 전송
+  // 메시지 전송 - 실제 백엔드 API 사용
   const sendMessage = async () => {
-    if (!inputMessage.trim()) return
+    if (!inputMessage.trim() || !preData) return
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -268,30 +264,75 @@ export default function ConsultationPage() {
     setInputMessage('')
     setIsLoading(true)
 
-    // 채팅 턴 카운트 증가
-    setChatTurnCount(prev => prev + 1)
+    try {
+      // 백엔드 챗봇 API 호출
+      const chatHistory = messages.map(msg => ({
+        role: msg.sender === 'user' ? 'user' : 'assistant',
+        content: msg.content,
+        timestamp: msg.timestamp
+      }))
 
-    setTimeout(() => {
-      const aiResponse = generateAIResponse(inputMessage, chatTurnCount + 1)
+      const response = await fetch('http://54.183.202.72:8001/api/v1/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: inputMessage,
+          user_profile: preData,
+          conversation_history: chatHistory
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const result = await response.json()
+
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: aiResponse.content,
+        content: result.response,
         sender: 'ai',
         timestamp: new Date()
       }
 
       setMessages(prev => [...prev, aiMessage])
-      setIsLoading(false)
 
-      // 위험도 평가 및 결과 단계 전환
-      if (aiResponse.shouldFinish) {
+      // 채팅 턴 카운트 증가
+      setChatTurnCount(prev => prev + 1)
+
+      // 5턴 이상 진행시 결과 단계로 전환
+      if (chatTurnCount >= 4) {
         setTimeout(() => {
           const risk = assessRisk(messages.concat([userMessage]))
           setRiskAssessment(risk)
           setCurrentPhase('results')
         }, 2000)
       }
-    }, 1500)
+
+    } catch (error) {
+      console.error('챗봇 API 오류:', error)
+
+      // 오류 발생 시 폴백 응답
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        content: `죄송합니다. 일시적으로 상담 서비스에 문제가 발생했습니다.
+
+다음 방법으로 도움받으실 수 있습니다:
+📞 다산콜센터: 120 (무료)
+🏢 거주지 주민센터 방문 상담
+🌐 복지로 온라인: www.bokjiro.go.kr
+
+잠시 후 다시 시도해주세요.`,
+        sender: 'ai',
+        timestamp: new Date()
+      }
+
+      setMessages(prev => [...prev, errorMessage])
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   // AI 응답 생성

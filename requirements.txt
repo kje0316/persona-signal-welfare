@@ -16,6 +16,9 @@ alembic==1.12.1
 boto3==1.29.0
 botocore==1.32.0
 
+# AI/LLM (Bedrock 직접 호출)
+# langchain 제거 - boto3로 직접 Bedrock 호출
+
 # 데이터 처리 및 ML
 numpy==1.24.3
 pandas==2.0.3
