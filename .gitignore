@@ -218,3 +218,5 @@ src/modules/data_analysis/risk_scoring/artifacts_tuned_A/
 src/modules/data_analysis/risk_scoring/artifacts_tuned_B/
 # allow this large CSV (LFS)
 !src/modules/data_analysis/risk_scoring/telecom_group_monthly_all_with_preds.csv
+.DS_Store
+src/modules/data_analysis/risk_scoring/out/grid_report_*.csv
