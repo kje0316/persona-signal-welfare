@@ -600,8 +600,19 @@ async def get_welfare_services(
 
     # BOKJIDB.xlsx Sheet2 데이터 사용
     try:
-        excel_path = '/Users/kje/coding/project/persona-signal-welfare/src/data/processed/BOKJIDB.xlsx'
+        # EC2 호환을 위한 상대 경로 사용
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.dirname(os.path.dirname(current_dir))
+        excel_path = os.path.join(project_root, 'src', 'data', 'processed', 'BOKJIDB.xlsx')
+
+        print(f"Excel file path: {excel_path}")
+
+        if not os.path.exists(excel_path):
+            print(f"Excel file not found at: {excel_path}")
+            raise FileNotFoundError(f"Excel file not found: {excel_path}")
+
         df = pd.read_excel(excel_path, sheet_name='Sheet2')
+        print(f"Excel file loaded successfully. Total rows: {len(df)}")
 
         # DataFrame을 서비스 형태로 변환
         excel_services = []
@@ -643,6 +654,8 @@ async def get_welfare_services(
     if (filters.gender == 'female' and filters.lifeStage == 'pregnancy' and
         filters.income == '4000' and filters.householdSize == '1' and
         filters.householdSituation == 'general'):
+
+        print(f"시나리오 1 조건 만족. 총 {len(excel_services)}개 서비스 검토 중...")
 
         for service in excel_services:
             metadata = service.get('metadata', {})
