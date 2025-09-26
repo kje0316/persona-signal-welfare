@@ -5,6 +5,10 @@ echo "🚀 복지 서비스 시스템을 시작합니다..."
 
 # 백그라운드에서 백엔드 서버 시작
 echo "📡 백엔드 API 서버 시작 (포트 8001)..."
+export PATH="$HOME/.pyenv/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
 pyenv activate project
 python src/backend/welfare_service_api.py &
 BACKEND_PID=$!
