@@ -600,16 +600,29 @@ async def get_welfare_services(
 
     # BOKJIDB.xlsx Sheet2 데이터 사용
     try:
-        # EC2 호환을 위한 상대 경로 사용
+        # EC2 호환을 위한 상대 경로 사용 (우선) 또는 절대 경로 (폴백)
         current_dir = os.path.dirname(os.path.abspath(__file__))
         project_root = os.path.dirname(os.path.dirname(current_dir))
-        excel_path = os.path.join(project_root, 'src', 'data', 'processed', 'BOKJIDB.xlsx')
+        excel_path = os.path.join(project_root, 'BOKJIDB.xlsx')  # 프로젝트 루트에서 찾기
 
-        print(f"Excel file path: {excel_path}")
+        print(f"Trying Excel file path: {excel_path}")
 
+        # 프로젝트 루트에 없으면 다른 경로들 시도
         if not os.path.exists(excel_path):
-            print(f"Excel file not found at: {excel_path}")
-            raise FileNotFoundError(f"Excel file not found: {excel_path}")
+            alternative_paths = [
+                os.path.join(project_root, 'src', 'data', 'processed', 'BOKJIDB.xlsx'),
+                '/Users/kje/coding/project/persona-signal-welfare/src/data/processed/BOKJIDB.xlsx',
+                '/Users/kje/coding/project/persona-signal-welfare/BOKJIDB.xlsx'
+            ]
+
+            for alt_path in alternative_paths:
+                if os.path.exists(alt_path):
+                    excel_path = alt_path
+                    print(f"Found Excel file at: {excel_path}")
+                    break
+            else:
+                print(f"Excel file not found in any of the expected locations")
+                raise FileNotFoundError(f"Excel file not found")
 
         df = pd.read_excel(excel_path, sheet_name='Sheet2')
         print(f"Excel file loaded successfully. Total rows: {len(df)}")
