@@ -626,7 +626,6 @@ async def get_welfare_services(
 
         df = pd.read_excel(excel_path, sheet_name='Sheet2')
         print(f"Excel file loaded successfully. Total rows: {len(df)}")
-
         # DataFrame을 서비스 형태로 변환
         excel_services = []
         for idx, row in df.iterrows():
@@ -669,7 +668,6 @@ async def get_welfare_services(
         filters.householdSituation == 'general'):
 
         print(f"시나리오 1 조건 만족. 총 {len(excel_services)}개 서비스 검토 중...")
-
         for service in excel_services:
             metadata = service.get('metadata', {})
             gender = metadata.get('gender', 'ALL')
