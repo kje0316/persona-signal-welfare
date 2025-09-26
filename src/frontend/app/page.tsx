@@ -7,7 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
-import { Search, MessageCircle, Home, Baby, Briefcase, Utensils, Heart, BookOpen, ArrowRight, Users, Calendar, DollarSign, Bot } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { Search, MessageCircle, Home, Baby, Briefcase, Utensils, Heart, BookOpen, ArrowRight, Users, Calendar, DollarSign, Bot, BarChart3, TrendingUp } from 'lucide-react'
 
 // 복지 서비스 데이터
 const welfareServices = [
@@ -123,26 +124,22 @@ function ProcessStep({
   )
 }
 
-// 사전 상담 폼 컴포넌트 - 실제 복지 서비스 분석 결과 기반
+// 사전 상담 폼 컴포넌트 - 간소화된 버전
 function PreConsultationForm() {
   const [selectedGender, setSelectedGender] = useState<string>('')
-  const [selectedAge, setSelectedAge] = useState<string>('')
-  const [selectedRegion, setSelectedRegion] = useState<string>('')
-  const [selectedIncome, setSelectedIncome] = useState<string>('')
-  const [selectedTargetGroup, setSelectedTargetGroup] = useState<string>('')
-  const [selectedHousehold, setSelectedHousehold] = useState<string>('')
-  const [selectedHousing, setSelectedHousing] = useState<string>('')
+  const [selectedLifeStage, setSelectedLifeStage] = useState<string>('')
+  const [incomeAmount, setIncomeAmount] = useState<string>('')
+  const [selectedHouseholdSize, setSelectedHouseholdSize] = useState<string>('')
+  const [selectedHouseholdSituation, setSelectedHouseholdSituation] = useState<string>('')
 
   const handleStartConsultation = () => {
     // 선택된 조건들을 세션 스토리지에 저장
     const consultationData = {
       gender: selectedGender,
-      age: selectedAge,
-      region: selectedRegion,
-      income: selectedIncome,
-      targetGroup: selectedTargetGroup,
-      household: selectedHousehold,
-      housing: selectedHousing,
+      lifeStage: selectedLifeStage,
+      income: incomeAmount,
+      householdSize: selectedHouseholdSize,
+      householdSituation: selectedHouseholdSituation,
       timestamp: new Date().toISOString()
     }
 
@@ -154,7 +151,7 @@ function PreConsultationForm() {
     window.location.href = '/consultation'
   }
 
-  const isFormComplete = selectedGender && selectedAge && selectedRegion && selectedIncome && selectedTargetGroup && selectedHousehold && selectedHousing
+  const isFormComplete = selectedGender && selectedLifeStage && incomeAmount && selectedHouseholdSize && selectedHouseholdSituation
 
   return (
     <div className="space-y-8">
@@ -167,243 +164,128 @@ function PreConsultationForm() {
         <RadioGroup value={selectedGender} onValueChange={setSelectedGender} className="flex gap-6">
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="male" id="gender-male" />
-            <Label htmlFor="gender-male" className="cursor-pointer">남성</Label>
+            <Label htmlFor="gender-male" className="cursor-pointer">남자</Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="female" id="gender-female" />
-            <Label htmlFor="gender-female" className="cursor-pointer">여성</Label>
+            <Label htmlFor="gender-female" className="cursor-pointer">여자</Label>
           </div>
         </RadioGroup>
       </div>
 
-      {/* 연령대 선택 - 실제 데이터 분석 기반 */}
+      {/* 생애주기 선택 */}
       <div>
         <Label className="text-lg font-semibold text-gray-700 mb-4 block">
           <Calendar className="w-5 h-5 inline mr-2" />
-          연령대를 선택해주세요
+          생애주기를 선택해주세요
         </Label>
-        <RadioGroup value={selectedAge} onValueChange={setSelectedAge} className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <RadioGroup value={selectedLifeStage} onValueChange={setSelectedLifeStage} className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="child" id="age-child" />
-            <Label htmlFor="age-child" className="cursor-pointer">18세 이하</Label>
+            <RadioGroupItem value="pregnancy" id="life-pregnancy" />
+            <Label htmlFor="life-pregnancy" className="cursor-pointer">출산-임신</Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="youth" id="age-youth" />
-            <Label htmlFor="age-youth" className="cursor-pointer">19-39세 청년</Label>
+            <RadioGroupItem value="infant" id="life-infant" />
+            <Label htmlFor="life-infant" className="cursor-pointer">영유아</Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="middle" id="age-middle" />
-            <Label htmlFor="age-middle" className="cursor-pointer">40-64세 중장년</Label>
+            <RadioGroupItem value="child" id="life-child" />
+            <Label htmlFor="life-child" className="cursor-pointer">아동</Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="senior" id="age-senior" />
-            <Label htmlFor="age-senior" className="cursor-pointer">65세 이상 노인</Label>
+            <RadioGroupItem value="adolescent" id="life-adolescent" />
+            <Label htmlFor="life-adolescent" className="cursor-pointer">청소년</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="youth" id="life-youth" />
+            <Label htmlFor="life-youth" className="cursor-pointer">청년</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="middle" id="life-middle" />
+            <Label htmlFor="life-middle" className="cursor-pointer">중장년</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="senior" id="life-senior" />
+            <Label htmlFor="life-senior" className="cursor-pointer">노년</Label>
           </div>
         </RadioGroup>
       </div>
 
-      {/* 거주지역 선택 */}
-      <div>
-        <Label className="text-lg font-semibold text-gray-700 mb-4 block">
-          <Home className="w-5 h-5 inline mr-2" />
-          거주지역을 선택해주세요
-        </Label>
-        <RadioGroup value={selectedRegion} onValueChange={setSelectedRegion} className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="seoul" id="region-seoul" />
-            <Label htmlFor="region-seoul" className="cursor-pointer">서울특별시</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="busan" id="region-busan" />
-            <Label htmlFor="region-busan" className="cursor-pointer">부산광역시</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="daegu" id="region-daegu" />
-            <Label htmlFor="region-daegu" className="cursor-pointer">대구광역시</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="incheon" id="region-incheon" />
-            <Label htmlFor="region-incheon" className="cursor-pointer">인천광역시</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="gwangju" id="region-gwangju" />
-            <Label htmlFor="region-gwangju" className="cursor-pointer">광주광역시</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="daejeon" id="region-daejeon" />
-            <Label htmlFor="region-daejeon" className="cursor-pointer">대전광역시</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="ulsan" id="region-ulsan" />
-            <Label htmlFor="region-ulsan" className="cursor-pointer">울산광역시</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="sejong" id="region-sejong" />
-            <Label htmlFor="region-sejong" className="cursor-pointer">세종특별자치시</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="gyeonggi" id="region-gyeonggi" />
-            <Label htmlFor="region-gyeonggi" className="cursor-pointer">경기도</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="gangwon" id="region-gangwon" />
-            <Label htmlFor="region-gangwon" className="cursor-pointer">강원특별자치도</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="chungbuk" id="region-chungbuk" />
-            <Label htmlFor="region-chungbuk" className="cursor-pointer">충청북도</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="chungnam" id="region-chungnam" />
-            <Label htmlFor="region-chungnam" className="cursor-pointer">충청남도</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="jeonbuk" id="region-jeonbuk" />
-            <Label htmlFor="region-jeonbuk" className="cursor-pointer">전북특별자치도</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="jeonnam" id="region-jeonnam" />
-            <Label htmlFor="region-jeonnam" className="cursor-pointer">전라남도</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="gyeongbuk" id="region-gyeongbuk" />
-            <Label htmlFor="region-gyeongbuk" className="cursor-pointer">경상북도</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="gyeongnam" id="region-gyeongnam" />
-            <Label htmlFor="region-gyeongnam" className="cursor-pointer">경상남도</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="jeju" id="region-jeju" />
-            <Label htmlFor="region-jeju" className="cursor-pointer">제주특별자치도</Label>
-          </div>
-        </RadioGroup>
-      </div>
-
-      {/* 소득 수준 선택 - 실제 복지 기준 */}
+      {/* 소득 입력 */}
       <div>
         <Label className="text-lg font-semibold text-gray-700 mb-4 block">
           <DollarSign className="w-5 h-5 inline mr-2" />
-          가구 소득 수준을 선택해주세요
+          연간 소득을 입력해주세요 (만원)
         </Label>
-        <RadioGroup value={selectedIncome} onValueChange={setSelectedIncome} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="basic_recipient" id="income-basic" />
-            <Label htmlFor="income-basic" className="cursor-pointer">기초생활수급자</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="near_poor" id="income-near-poor" />
-            <Label htmlFor="income-near-poor" className="cursor-pointer">차상위계층</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="median_100" id="income-median100" />
-            <Label htmlFor="income-median100" className="cursor-pointer">기준중위소득 100% 이하</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="median_150" id="income-median150" />
-            <Label htmlFor="income-median150" className="cursor-pointer">기준중위소득 150% 이하</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="middle_income" id="income-middle" />
-            <Label htmlFor="income-middle" className="cursor-pointer">일반소득층</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="unknown" id="income-unknown" />
-            <Label htmlFor="income-unknown" className="cursor-pointer text-gray-600">잘 모르겠음</Label>
-          </div>
-        </RadioGroup>
+        <Input
+          type="number"
+          placeholder="예: 3000 (3000만원)"
+          value={incomeAmount}
+          onChange={(e) => setIncomeAmount(e.target.value)}
+          className="text-lg p-4 border-2 focus:border-blue-500"
+        />
       </div>
 
       {/* 가구형태 선택 */}
       <div>
         <Label className="text-lg font-semibold text-gray-700 mb-4 block">
           <Users className="w-5 h-5 inline mr-2" />
-          가구 형태를 선택해주세요
+          가구형태를 선택해주세요
         </Label>
-        <RadioGroup value={selectedHousehold} onValueChange={setSelectedHousehold} className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <RadioGroup value={selectedHouseholdSize} onValueChange={setSelectedHouseholdSize} className="flex gap-6">
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="single" id="household-single" />
-            <Label htmlFor="household-single" className="cursor-pointer">1인 가구</Label>
+            <RadioGroupItem value="1" id="household-1" />
+            <Label htmlFor="household-1" className="cursor-pointer">1인</Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="couple" id="household-couple" />
-            <Label htmlFor="household-couple" className="cursor-pointer">부부 2인</Label>
+            <RadioGroupItem value="2" id="household-2" />
+            <Label htmlFor="household-2" className="cursor-pointer">2인</Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="family_3" id="household-family3" />
-            <Label htmlFor="household-family3" className="cursor-pointer">3인 가족</Label>
+            <RadioGroupItem value="3" id="household-3" />
+            <Label htmlFor="household-3" className="cursor-pointer">3인</Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="family_4_plus" id="household-family4plus" />
-            <Label htmlFor="household-family4plus" className="cursor-pointer">4인 이상</Label>
+            <RadioGroupItem value="4+" id="household-4plus" />
+            <Label htmlFor="household-4plus" className="cursor-pointer">4인이상</Label>
           </div>
         </RadioGroup>
       </div>
 
-      {/* 대상 유형 선택 - 분석 결과 기반 */}
+      {/* 가구상황 선택 - 특별대상 기반 */}
       <div>
         <Label className="text-lg font-semibold text-gray-700 mb-4 block">
           <Heart className="w-5 h-5 inline mr-2" />
-          해당하는 특별 대상이 있나요?
+          가구상황을 선택해주세요
         </Label>
-        <RadioGroup value={selectedTargetGroup} onValueChange={setSelectedTargetGroup} className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <RadioGroup value={selectedHouseholdSituation} onValueChange={setSelectedHouseholdSituation} className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="single_parent" id="target-single-parent" />
-            <Label htmlFor="target-single-parent" className="cursor-pointer">한부모·조손가정</Label>
+            <RadioGroupItem value="single_parent" id="situation-single-parent" />
+            <Label htmlFor="situation-single-parent" className="cursor-pointer">한부모·조손가정</Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="disability" id="target-disability" />
-            <Label htmlFor="target-disability" className="cursor-pointer">장애인</Label>
+            <RadioGroupItem value="disability" id="situation-disability" />
+            <Label htmlFor="situation-disability" className="cursor-pointer">장애인</Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="veteran" id="target-veteran" />
-            <Label htmlFor="target-veteran" className="cursor-pointer">보훈대상자</Label>
+            <RadioGroupItem value="veteran" id="situation-veteran" />
+            <Label htmlFor="situation-veteran" className="cursor-pointer">보훈대상자</Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="multi_child" id="target-multi-child" />
-            <Label htmlFor="target-multi-child" className="cursor-pointer">다자녀가정</Label>
+            <RadioGroupItem value="multi_child" id="situation-multi-child" />
+            <Label htmlFor="situation-multi-child" className="cursor-pointer">다자녀가정</Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="multicultural" id="target-multicultural" />
-            <Label htmlFor="target-multicultural" className="cursor-pointer">다문화·탈북민</Label>
+            <RadioGroupItem value="multicultural" id="situation-multicultural" />
+            <Label htmlFor="situation-multicultural" className="cursor-pointer">다문화·탈북민</Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="general" id="target-general" />
-            <Label htmlFor="target-general" className="cursor-pointer">해당사항 없음</Label>
-          </div>
-        </RadioGroup>
-      </div>
-
-      {/* 주거 상황 선택 */}
-      <div>
-        <Label className="text-lg font-semibold text-gray-700 mb-4 block">
-          <Home className="w-5 h-5 inline mr-2" />
-          주거 상황을 선택해주세요
-        </Label>
-        <RadioGroup value={selectedHousing} onValueChange={setSelectedHousing} className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="homeless" id="housing-homeless" />
-            <Label htmlFor="housing-homeless" className="cursor-pointer">무주택자</Label>
+            <RadioGroupItem value="low_income" id="situation-low-income" />
+            <Label htmlFor="situation-low-income" className="cursor-pointer">저소득층</Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="monthly_rent" id="housing-rent" />
-            <Label htmlFor="housing-rent" className="cursor-pointer">월세 거주</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="jeonse" id="housing-jeonse" />
-            <Label htmlFor="housing-jeonse" className="cursor-pointer">전세 거주</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="rental" id="housing-rental" />
-            <Label htmlFor="housing-rental" className="cursor-pointer">임대주택 거주</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="owned" id="housing-owned" />
-            <Label htmlFor="housing-owned" className="cursor-pointer">자가 소유</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="unknown" id="housing-unknown" />
-            <Label htmlFor="housing-unknown" className="cursor-pointer text-gray-600">잘 모르겠음</Label>
+            <RadioGroupItem value="general" id="situation-general" />
+            <Label htmlFor="situation-general" className="cursor-pointer">해당사항 없음</Label>
           </div>
         </RadioGroup>
       </div>
@@ -453,7 +335,7 @@ export default function HomePage() {
       {/* 헤더 */}
       <div className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-          🧭 서울 동행 나침반
+          🧭 동행 나침반
         </h1>
         <p className="text-xl text-gray-600 mb-8">
           복지 서비스 맞춤 매칭 플랫폼
@@ -490,41 +372,30 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* 복지 서비스 목록 섹션 */}
-      <Card className="shadow-xl border-0">
-        <CardHeader className="text-center bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-lg">
-          <CardTitle className="text-3xl font-bold text-gray-800 mb-2">
-            📋 주요 복지 서비스
-          </CardTitle>
-          <CardDescription className="text-lg text-gray-600">
-            서울시에서 제공하는 대표적인 복지 서비스들입니다. 위의 AI 상담을 통해 맞춤 추천을 받아보세요.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="p-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {welfareServices.map((service, index) => (
-              <WelfareServiceCard key={index} {...service} />
-            ))}
-          </div>
-          <div className="text-center mt-8">
-            <p className="text-sm text-gray-600 mb-4">
-              더 정확한 맞춤 서비스가 필요하시다면
-            </p>
-            <Button variant="outline" size="lg" onClick={() => {
-              document.querySelector('.consultation-card')?.scrollIntoView({ behavior: 'smooth' })
-            }}>
-              AI 맞춤 상담으로 정확한 추천 받기
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
       {/* AI 데이터 증강 섹션 */}
-      <div className="text-center mt-16 p-8 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border-2 border-purple-200">
-        <h3 className="text-2xl font-bold text-gray-800 mb-4">🤖 AI 데이터 증강 시스템</h3>
-        <p className="text-gray-600 mb-6 text-lg">
-          복지 데이터를 AI 페르소나 기반으로 분석하고 증강하여 더 나은 서비스를 만들어보세요
+      <div className="text-center mt-16 p-12 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 rounded-2xl border-2 border-purple-200 shadow-xl max-w-4xl mx-auto">
+        <h3 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">🤖 AI 데이터 증강 시스템</h3>
+        <p className="text-gray-700 mb-8 text-xl leading-relaxed max-w-3xl mx-auto">
+          복지 데이터를 AI 페르소나 기반으로 분석하고 증강하여<br/>
+          <span className="font-semibold text-purple-700">더 정교하고 포용적인 서비스</span>를 만들어보세요
         </p>
+        <div className="grid md:grid-cols-3 gap-6 mb-8 text-sm text-gray-600">
+          <div className="flex flex-col items-center p-4 bg-white/50 rounded-lg">
+            <Bot className="w-8 h-8 text-purple-600 mb-2" />
+            <span className="font-semibold">AI 페르소나 생성</span>
+            <span className="text-xs">실제 사용자 패턴 분석</span>
+          </div>
+          <div className="flex flex-col items-center p-4 bg-white/50 rounded-lg">
+            <BarChart3 className="w-8 h-8 text-blue-600 mb-2" />
+            <span className="font-semibold">성능 분석</span>
+            <span className="text-xs">데이터 품질 개선 측정</span>
+          </div>
+          <div className="flex flex-col items-center p-4 bg-white/50 rounded-lg">
+            <TrendingUp className="w-8 h-8 text-green-600 mb-2" />
+            <span className="font-semibold">추천 최적화</span>
+            <span className="text-xs">개인화 서비스 향상</span>
+          </div>
+        </div>
         <Link href="/augmentation">
           <Button size="lg" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold px-8 py-4 rounded-full shadow-lg">
             <Bot className="w-5 h-5 mr-2" />

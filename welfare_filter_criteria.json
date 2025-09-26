@@ -1,0 +1,316 @@
+{
+  "age": {
+    "type": "select",
+    "options": [
+      {
+        "value": "youth",
+        "label": "청년 (19-39세)",
+        "keywords": [
+          "청년"
+        ]
+      },
+      {
+        "value": "middle",
+        "label": "중장년 (40-64세)",
+        "keywords": [
+          "중장년"
+        ]
+      },
+      {
+        "value": "senior",
+        "label": "노인 (65세 이상)",
+        "keywords": [
+          "노인"
+        ]
+      },
+      {
+        "value": "child",
+        "label": "아동·청소년 (18세 이하)",
+        "keywords": [
+          "아동",
+          "청소년",
+          "영유아"
+        ]
+      },
+      {
+        "value": "all",
+        "label": "연령 무관",
+        "keywords": []
+      }
+    ]
+  },
+  "income": {
+    "type": "select",
+    "options": [
+      {
+        "value": "basic",
+        "label": "기초생활수급자",
+        "keywords": [
+          "기초생활",
+          "수급자"
+        ]
+      },
+      {
+        "value": "near_poor",
+        "label": "차상위계층",
+        "keywords": [
+          "차상위"
+        ]
+      },
+      {
+        "value": "low_50",
+        "label": "기준중위소득 50% 이하",
+        "keywords": [
+          "중위소득 50%",
+          "중위소득50%"
+        ]
+      },
+      {
+        "value": "low_100",
+        "label": "기준중위소득 100% 이하",
+        "keywords": [
+          "중위소득 100%",
+          "중위소득100%"
+        ]
+      },
+      {
+        "value": "low_150",
+        "label": "기준중위소득 150% 이하",
+        "keywords": [
+          "중위소득 150%",
+          "중위소득150%"
+        ]
+      },
+      {
+        "value": "middle_income",
+        "label": "중간소득층",
+        "keywords": []
+      },
+      {
+        "value": "all",
+        "label": "소득 무관",
+        "keywords": []
+      }
+    ]
+  },
+  "family": {
+    "type": "checkbox",
+    "options": [
+      {
+        "value": "single",
+        "label": "1인 가구",
+        "keywords": [
+          "1인가구",
+          "독거"
+        ]
+      },
+      {
+        "value": "couple",
+        "label": "2인 가구 (부부)",
+        "keywords": [
+          "2인가구"
+        ]
+      },
+      {
+        "value": "multi_child",
+        "label": "다자녀 가정",
+        "keywords": [
+          "다자녀",
+          "3자녀",
+          "4자녀"
+        ]
+      },
+      {
+        "value": "single_parent",
+        "label": "한부모 가정",
+        "keywords": [
+          "한부모",
+          "미혼모"
+        ]
+      },
+      {
+        "value": "grandparent",
+        "label": "조손 가정",
+        "keywords": [
+          "조손"
+        ]
+      },
+      {
+        "value": "multicultural",
+        "label": "다문화 가정",
+        "keywords": [
+          "다문화"
+        ]
+      },
+      {
+        "value": "defector",
+        "label": "탈북민 가정",
+        "keywords": [
+          "새터민",
+          "탈북"
+        ]
+      }
+    ]
+  },
+  "housing": {
+    "type": "select",
+    "options": [
+      {
+        "value": "homeless",
+        "label": "무주택자",
+        "keywords": [
+          "무주택"
+        ]
+      },
+      {
+        "value": "jeonse",
+        "label": "전세 거주",
+        "keywords": [
+          "전세"
+        ]
+      },
+      {
+        "value": "monthly_rent",
+        "label": "월세 거주",
+        "keywords": [
+          "월세"
+        ]
+      },
+      {
+        "value": "rental",
+        "label": "임대주택 거주",
+        "keywords": [
+          "임대"
+        ]
+      },
+      {
+        "value": "owned",
+        "label": "자가 소유",
+        "keywords": [
+          "자가"
+        ]
+      },
+      {
+        "value": "all",
+        "label": "주거형태 무관",
+        "keywords": []
+      }
+    ]
+  },
+  "employment": {
+    "type": "checkbox",
+    "options": [
+      {
+        "value": "unemployed",
+        "label": "실업자",
+        "keywords": [
+          "실업",
+          "구직자"
+        ]
+      },
+      {
+        "value": "job_seeking",
+        "label": "구직중",
+        "keywords": [
+          "구직",
+          "취업준비생"
+        ]
+      },
+      {
+        "value": "student",
+        "label": "학생/재학중",
+        "keywords": [
+          "학생",
+          "재학"
+        ]
+      },
+      {
+        "value": "employed",
+        "label": "직장인",
+        "keywords": [
+          "취업",
+          "직장"
+        ]
+      },
+      {
+        "value": "self_employed",
+        "label": "자영업자",
+        "keywords": [
+          "자영업",
+          "창업"
+        ]
+      },
+      {
+        "value": "retired",
+        "label": "은퇴/퇴직",
+        "keywords": [
+          "은퇴",
+          "퇴직"
+        ]
+      },
+      {
+        "value": "career_break",
+        "label": "경력단절",
+        "keywords": [
+          "경력단절"
+        ]
+      }
+    ]
+  },
+  "special_condition": {
+    "type": "checkbox",
+    "options": [
+      {
+        "value": "pregnancy",
+        "label": "임신/출산/육아",
+        "keywords": [
+          "임산부",
+          "출산",
+          "육아",
+          "보육"
+        ]
+      },
+      {
+        "value": "disability",
+        "label": "장애인",
+        "keywords": [
+          "장애",
+          "장애인"
+        ]
+      },
+      {
+        "value": "disease",
+        "label": "질환자",
+        "keywords": [
+          "질환",
+          "암",
+          "중증",
+          "희귀병",
+          "난치병",
+          "치매"
+        ]
+      },
+      {
+        "value": "medical",
+        "label": "의료지원 필요",
+        "keywords": [
+          "의료급여",
+          "의료비"
+        ]
+      },
+      {
+        "value": "veteran",
+        "label": "국가유공자",
+        "keywords": [
+          "국가유공자",
+          "보훈"
+        ]
+      },
+      {
+        "value": "none",
+        "label": "해당사항 없음",
+        "keywords": []
+      }
+    ]
+  }
+}
