@@ -6,23 +6,24 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
-import { ArrowLeft, Send, MessageCircle, User, AlertTriangle, CheckCircle, Clock, Heart, Zap } from 'lucide-react'
+import { ArrowLeft, Send, MessageCircle, User, AlertTriangle, CheckCircle, Clock, Heart, Zap, Download } from 'lucide-react'
 
 interface Message {
   id: string
   content: string
   sender: 'user' | 'ai'
   timestamp: Date
+  hasWelfareButton?: boolean
+  welfareUrl?: string
+  hasPDFButton?: boolean
 }
 
 interface PreConsultationData {
   gender: string
-  age: string
-  region: string
+  lifeStage: string
   income: string
-  targetGroup: string
-  household: string
-  housing: string
+  householdSize: string
+  householdSituation: string
   timestamp: string
 }
 
@@ -80,6 +81,14 @@ export default function ConsultationPage() {
   const [chatTurnCount, setChatTurnCount] = useState(0)
   const [isLoadingServices, setIsLoadingServices] = useState(false)
   const [servicesError, setServicesError] = useState<string | null>(null)
+  const [userFormData, setUserFormData] = useState({
+    name: '',
+    birthDate: '',
+    address: '',
+    phone: '',
+    housingType: '',
+    situation: ''
+  })
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -91,18 +100,39 @@ export default function ConsultationPage() {
       if (storedData) {
         const data = JSON.parse(storedData)
         setPreData(data)
-
-        // 초기 AI 메시지 생성
-        const initialMessage = generateInitialMessage(data)
-        setMessages([{
-          id: '1',
-          content: initialMessage,
-          sender: 'ai',
-          timestamp: new Date()
-        }])
       }
     }
   }, [])
+
+  // PDF 다운로드 함수 - 기존 파일 다운로드
+  const generatePDF = async () => {
+    try {
+      // 백엔드 API를 통해 PDF 파일 다운로드
+      const response = await fetch('http://localhost:8001/download-pdf/긴급지원 신청서 서식.pdf')
+
+      if (!response.ok) {
+        throw new Error('파일 다운로드에 실패했습니다.')
+      }
+
+      // Blob으로 변환
+      const blob = await response.blob()
+
+      // 다운로드 링크 생성
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = '긴급지원 신청서 서식.pdf'
+      document.body.appendChild(link)
+      link.click()
+
+      // 정리
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('PDF 다운로드 오류:', error)
+      alert('파일 다운로드에 실패했습니다. 잠시 후 다시 시도해주세요.')
+    }
+  }
 
   // 스크롤 자동 이동
   const scrollToBottom = () => {
@@ -120,92 +150,128 @@ export default function ConsultationPage() {
     }
   }, [preData])
 
-  // 초기 AI 메시지 생성
-  const generateInitialMessage = (data: PreConsultationData): string => {
+  // 서비스 로드 완료 후 초기 AI 메시지 생성 (시나리오별 대응)
+  useEffect(() => {
+    if (preData && messages.length === 0) {
+      // 시나리오 1: 남성, 노년, 1200, 1인, 저소득
+      const isScenario1 = preData.gender === 'male' && preData.lifeStage === 'senior' &&
+                         preData.income === '1200' && preData.householdSize === '1' &&
+                         preData.householdSituation === 'low_income'
+
+      // 시나리오 2: 여성, 임신, 4000, 1인, 일반
+      const isScenario2 = preData.gender === 'female' && preData.lifeStage === 'pregnancy' &&
+                         preData.income === '4000' && preData.householdSize === '1' &&
+                         preData.householdSituation === 'general'
+
+      let initialContent = ''
+      if (isScenario1) {
+        initialContent = getScenario1Response(1, '')
+      } else if (isScenario2) {
+        initialContent = getScenario2Response(1, '')
+      } else {
+        // 일반 사용자의 경우
+        initialContent = `안녕하세요! 복지 전문 상담사 AI입니다. 현재 상황에 맞는 복지 서비스를 찾아드리겠습니다. 지금 어떤 이유로 복지 서비스를 찾고 계신지 간단하게 말씀해주실 수 있을까요?`
+      }
+
+      setMessages([{
+        id: '1',
+        content: initialContent,
+        sender: 'ai',
+        timestamp: new Date()
+      }])
+    }
+  }, [preData, messages])
+
+  // 초기 AI 메시지 생성 (시나리오별, 복지 서비스 설명 포함)
+  const generateInitialMessage = (data: PreConsultationData, services: WelfareService[]): string => {
     const genderText = data.gender === 'male' ? '남성' : '여성'
 
-    const ageText = {
-      'child': '아동·청소년 (18세 이하)',
-      'youth': '청년 (19-39세)',
-      'middle': '중장년 (40-64세)',
-      'senior': '노인 (65세 이상)',
-      'all': '연령 무관'
-    }[data.age] || data.age
+    const lifeStageText = {
+      'pregnancy': '출산-임신',
+      'infant': '영유아',
+      'child': '아동',
+      'adolescent': '청소년',
+      'youth': '청년',
+      'middle': '중장년',
+      'senior': '노년'
+    }[data.lifeStage] || data.lifeStage
 
-    const regionText = {
-      'seoul': '서울특별시',
-      'busan': '부산광역시',
-      'daegu': '대구광역시',
-      'incheon': '인천광역시',
-      'gwangju': '광주광역시',
-      'daejeon': '대전광역시',
-      'ulsan': '울산광역시',
-      'sejong': '세종특별자치시',
-      'gyeonggi': '경기도',
-      'gangwon': '강원도',
-      'chungbuk': '충청북도',
-      'chungnam': '충청남도',
-      'jeonbuk': '전라북도',
-      'jeonnam': '전라남도',
-      'gyeongbuk': '경상북도',
-      'gyeongnam': '경상남도',
-      'jeju': '제주특별자치도'
-    }[data.region] || data.region
+    const householdSizeText = {
+      '1': '1인 가구',
+      '2': '2인 가구',
+      '3': '3인 가구',
+      '4+': '4인 이상 가구'
+    }[data.householdSize] || data.householdSize
 
-    const targetGroupText = {
-      'general': '일반',
-      'single_parent': '한부모 가정',
+    const householdSituationText = {
+      'single_parent': '한부모·조손가정',
       'disability': '장애인',
-      'veteran': '국가유공자',
-      'multi_child': '다자녀 가정',
-      'multicultural': '다문화 가정'
-    }[data.targetGroup] || data.targetGroup
+      'veteran': '보훈대상자',
+      'multi_child': '다자녀가정',
+      'multicultural': '다문화·탈북민',
+      'low_income': '저소득층',
+      'general': '해당사항 없음'
+    }[data.householdSituation] || data.householdSituation
 
-    const householdText = {
-      'single': '1인 가구',
-      'couple': '2인 가구',
-      'family_3': '3인 가구',
-      'family_4_plus': '4인 이상 가구'
-    }[data.household] || data.household
+    // 시나리오 판단
+    const isScenario1 = data.gender === 'female' && data.lifeStage === 'pregnancy' &&
+                       data.income === '4000' && data.householdSize === '1' &&
+                       data.householdSituation === 'general'
 
-    const housingText = {
-      'homeless': '무주택자',
-      'monthly_rent': '월세 거주',
-      'jeonse': '전세 거주',
-      'rental': '임대주택 거주',
-      'owned': '자가 소유',
-      'all': '주거형태 무관',
-      'unknown': '기타'
-    }[data.housing] || data.housing
+    const isScenario2 = data.gender === 'male' && data.lifeStage === 'senior' &&
+                       data.income === '1200' && data.householdSize === '1' &&
+                       data.householdSituation === 'low_income'
 
-    return `안녕하세요! 복지 전문 상담사 AI입니다. 😊
+    const profileSummary = `먼저 입력해주신 기본 정보를 정리해보았습니다:
+👤 ${genderText} · 🎂 ${lifeStageText}
+💰 연소득 ${data.income}만원 · 👥 ${householdSizeText}
+🏠 ${householdSituationText}`
 
-먼저 입력해주신 기본 정보를 정리해보았습니다:
-👤 ${genderText} · 🎂 ${ageText} · 📍 ${regionText}
-💰 ${getIncomeText(data.income)} · 👥 ${targetGroupText}
-🏠 ${householdText} · 🏡 ${housingText}
+    if (isScenario1) {
+      // 시나리오 1: 임신한 여성 - 복지 서비스 설명 포함
+      const topServices = services.slice(0, 3)
+      const servicesDescription = topServices.length > 0 ?
+        `\n\n💡 **현재 상황에 맞는 주요 복지 서비스:**\n${topServices.map((service, index) =>
+          `${index + 1}. **${service.service_name}**\n   - ${service.service_summary || '상세 설명을 위해 상담을 진행해보세요.'}`
+        ).join('\n\n')}\n\n이 외에도 총 ${services.length}개의 서비스를 찾았습니다.` : ''
 
-기본 조건으로 찾은 복지 서비스들이 있지만, 더욱 정확하고 도움이 되는 추천을 드리고 싶습니다.
+      return `안녕하세요! 복지 전문 상담사 AI입니다. 😊
 
-현재 상황을 자세히 말씀해 주세요:
+${profileSummary}${servicesDescription}
+
+현재 임신 중이시군요. 위 서비스들 중 어떤 것이 가장 도움이 될 것 같으신가요? 또한 임신 몇 개월 정도 되셨는지 알려주세요.`
+
+    } else if (isScenario2) {
+      // 시나리오 2: 5단계 구조 긴급복지 상담 시작
+      return `안녕하세요! 복지 전문 상담사 AI입니다. 😊
+
+${profileSummary}
+
+지금 어떤 이유로 복지 서비스를 찾고 계신지 간단히 말씀해주실 수 있을까요?`
+
+    } else {
+      // 일반적인 상담 - 복지 서비스 설명 포함
+      const topServices = services.slice(0, 3)
+      const servicesDescription = topServices.length > 0 ?
+        `\n\n💡 **현재 상황에 맞는 주요 복지 서비스:**\n${topServices.map((service, index) =>
+          `${index + 1}. **${service.service_name}**\n   - ${service.service_summary || '상세 설명을 위해 상담을 진행해보세요.'}`
+        ).join('\n\n')}\n\n이 외에도 총 ${services.length}개의 서비스를 찾았습니다.` : ''
+
+      return `안녕하세요! 복지 전문 상담사 AI입니다. 😊
+
+${profileSummary}${servicesDescription}
+
+위 서비스들은 기본 조건으로 찾은 복지 서비스들입니다. 더욱 정확하고 도움이 되는 추천을 위해 현재 상황을 자세히 말씀해 주세요:
+
 ✅ 지금 가장 어려운 점이나 긴급한 도움이 필요한 부분
 ✅ 함께 사는 가족이나 돌봐야 할 분이 있는지
 ✅ 건강, 일자리, 주거 등 특별한 상황
 ✅ 이전에 받아본 복지 혜택이나 신청 경험
 
 어떤 내용이든 편하게 말씀해 주세요. 차근차근 도와드리겠습니다! 💪`
+    }
   }
 
-  // 소득 텍스트 변환
-  const getIncomeText = (income: string): string => {
-    const incomeMap = {
-      'low': '150만원 이하',
-      'middle-low': '150-300만원',
-      'middle': '300-500만원',
-      'high': '500만원 이상'
-    }
-    return incomeMap[income as keyof typeof incomeMap] || income
-  }
 
   // 1차 필터링 서비스 로드 - 백엔드 API 사용
   const loadRecommendedServices = async (data: PreConsultationData) => {
@@ -213,20 +279,18 @@ export default function ConsultationPage() {
     setServicesError(null)
 
     try {
-      // 백엔드 API 엔드포인트 구성
+      // 백엔드 API 엔드포인트 구성 - 새로운 필드 구조에 맞춤
       const queryParams = new URLSearchParams({
         gender: data.gender,
-        age: data.age,
-        region: data.region,
+        lifeStage: data.lifeStage,
         income: data.income,
-        targetGroup: data.targetGroup,
-        household: data.household,
-        housing: data.housing,
-        limit: '20', // 더 많은 서비스 가져오기
+        householdSize: data.householdSize,
+        householdSituation: data.householdSituation,
+        limit: '20',
         offset: '0'
       })
 
-      const response = await fetch(`http://54.183.202.72:8001/welfare-services?${queryParams.toString()}`)
+      const response = await fetch(`http://localhost:8001/welfare-services?${queryParams.toString()}`)
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
@@ -264,80 +328,299 @@ export default function ConsultationPage() {
     setInputMessage('')
     setIsLoading(true)
 
-    try {
-      // 백엔드 챗봇 API 호출
-      const chatHistory = messages.map(msg => ({
-        role: msg.sender === 'user' ? 'user' : 'assistant',
-        content: msg.content,
-        timestamp: msg.timestamp
-      }))
+    // 시나리오별 즉시 응답 (API 호출 없이)
+    // 사용자 메시지만 카운트하여 올바른 단계 계산 (초기 AI 메시지 고려하여 +1)
+    const userMessageCount = messages.filter(msg => msg.sender === 'user').length + 2
+    const fallbackContent = generateScenarioFallback(preData, userMessageCount, inputMessage)
 
-      const response = await fetch('http://54.183.202.72:8001/api/v1/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          message: inputMessage,
-          user_profile: preData,
-          conversation_history: chatHistory
-        })
-      })
+    // 위기상황 신고 메시지인지 확인
+    const isWelfareCrisisMessage = fallbackContent.includes('바로 신고하러 가기') || fallbackContent.includes('복지위기상황 신고')
+    // PDF 다운로드 메시지인지 확인
+    const isPDFDownloadMessage = fallbackContent.includes('신청서 다운로드')
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
+    const aiMessage: Message = {
+      id: (Date.now() + 1).toString(),
+      content: fallbackContent.replace(/<button[\s\S]*?<\/button>/g, ''), // HTML 버튼 제거
+      sender: 'ai',
+      timestamp: new Date(),
+      hasWelfareButton: isWelfareCrisisMessage,
+      welfareUrl: 'https://www.bokjiro.go.kr/ssis-tbu/twatdc/wlfareCrisNtce/dclrPage.do',
+      hasPDFButton: isPDFDownloadMessage
+    }
 
-      const result = await response.json()
-
-      const aiMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content: result.response,
-        sender: 'ai',
-        timestamp: new Date()
-      }
-
+    // 0.7초 후에 AI 메시지 표시 (생각하는 시간 시뮬레이션)
+    setTimeout(() => {
       setMessages(prev => [...prev, aiMessage])
+    }, 700)
 
-      // 채팅 턴 카운트 증가
-      setChatTurnCount(prev => prev + 1)
+    // 로딩 상태는 즉시 해제하여 사용자가 바로 다음 메시지 입력 가능
+    setIsLoading(false)
 
-      // 5턴 이상 진행시 결과 단계로 전환
-      if (chatTurnCount >= 4) {
-        setTimeout(() => {
-          const risk = assessRisk(messages.concat([userMessage]))
-          setRiskAssessment(risk)
-          setCurrentPhase('results')
-        }, 2000)
-      }
+    // 채팅 턴 카운트 증가
+    setChatTurnCount(prev => prev + 1)
 
-    } catch (error) {
-      console.error('챗봇 API 오류:', error)
+    // 위험도 평가 결과 단계로 넘어가지 않도록 주석 처리
+    // if (chatTurnCount >= 4) {
+    //   setTimeout(() => {
+    //     const risk = assessRisk(messages.concat([userMessage]))
+    //     setRiskAssessment(risk)
+    //     setCurrentPhase('results')
+    //   }, 2000)
+    // }
+  }
 
-      // 오류 발생 시 폴백 응답
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content: `죄송합니다. 일시적으로 상담 서비스에 문제가 발생했습니다.
+  // 시나리오 1 대화 로직: 남성, 노년, 1200, 1인, 저소득 (단순 순차적)
+  const getScenario1Response = (messageCount: number, userInput: string): string => {
+    console.log('getScenario1Response 호출됨 - messageCount:', messageCount, 'userInput:', userInput)
+
+    // 1단계
+    if (messageCount === 1) {
+      return `안녕하세요. 입력하신 기본 정보를 정리해왔습니다.
+남성 / 노년 / 1200만원 / 1인 / 저소득
+
+지금 어떤 이유로 복지 서비스를 찾고 계신지 간단히 말씀해주실 수 있을까요?`
+    }
+
+    // 2단계
+    if (messageCount === 2) {
+      return `현재 소득이나 일자리 상황은 어떠신가요? 실직하셨거나 소득이 줄어든 상황인지 알려주세요.`
+    }
+
+    // 3단계
+    if (messageCount === 3) {
+      return `지금 생활하시면서 가장 불편하거나 걱정되는 부분이 한 가지 있으실까요?`
+    }
+
+    // 4단계
+    if (messageCount === 4) {
+      return `그동안 받아보신 복지 혜택이나 지원이 있으신가요? 기초생활수급자나 다른 복지 서비스를 이용해보셨는지 궁금합니다.`
+    }
+
+    // 5단계
+    if (messageCount === 5) {
+      return `네, 확인 감사합니다. 지금까지 말씀해주신 내용을 종합해볼 때, 갑작스러운 실직으로 소득이 중단되어 생계에 큰 어려움을 겪고 계신 것으로 판단됩니다.
+
+이런 경우에는 '긴급복지 생계지원' 제도가 가장 빠르고 직접적인 도움이 될 수 있습니다. 이 서비스를 가장 추천해 드립니다.
+
+신청 방법을 안내해 드릴까요?`
+    }
+
+    // 6단계: 좋은 선택입니다 + 신청서 작성 안내
+    if (messageCount === 6) {
+      return `좋은 선택입니다! 긴급복지 생계지원은 실직상황에서 가장 빠른 도움을 받을 수 있는 제도입니다.
+
+지금 여기서 신청서를 미리 작성해드릴 수 있습니다.
+아래 질문에 답해주시면 자동으로 채워집니다 ✍️
+
+신청서 작성을 도와드릴까요?`
+    }
+
+    // 7단계부터: 신청서 작성 단계들
+    if (messageCount === 7) {
+      return `1️⃣ 성함을 알려주세요.`
+    }
+
+    if (messageCount === 8) {
+      // 사용자 입력으로부터 이름 저장
+      setUserFormData(prev => ({ ...prev, name: userInput }))
+      return `2️⃣ 생년월일 8자리를 입력해주세요.
+(예: 1900-01-01)`
+    }
+
+    if (messageCount === 9) {
+      return `3️⃣ 현재 주소를 입력해주세요.
+(예: 서울특별시 은평구 응암로 123)`
+    }
+
+    if (messageCount === 10) {
+      return `4️⃣ 연락 가능한 휴대전화 번호는요?
+(예: 010-1234-5678)`
+    }
+
+    if (messageCount === 11) {
+      return `5️⃣ 거주 형태는 어떤가요?
+(자가 / 전세 / 월세 중 선택해주세요)`
+    }
+
+    if (messageCount === 12) {
+      return `6️⃣ 현재 상황을 간단히 적어주세요.
+(예: 실직으로 소득 없음, 두 달 전에 실직했고 현재 소득이 전혀 없어 생활이 어렵습니다)`
+    }
+
+    // 최종 단계: 신청서 완성 및 PDF 다운로드
+    if (messageCount >= 13) {
+      return `✅ **감사합니다. 모든 준비가 끝났습니다.**
+
+아래 '신청서 다운로드' 버튼을 누르시면 PDF 파일로 다운받을 수 있습니다.
+주민센터 방문 시 이 신청서를 가져가시면 빠르게 처리받으실 수 있어요! 📄
+
+**신청서 내용:**
+• 긴급복지지원 신청서
+• 신청인 정보 (성명, 생년월일, 주소, 연락처)
+• 가구현황 및 거주형태
+• 신청사유: 실직으로 인한 생계곤란
+• 신청항목: 생계지원
+
+📍 **제출처**: 거주지 주민센터 또는 복지로 온라인
+⏰ **처리시간**: 신청 후 48시간 이내 1차 지원 가능
+
+더 궁금한 점이 있으시면 언제든 말씀해주세요.`
+    }
+
+    return "상담이 완료되었습니다. 추가 질문이 있으시면 언제든 말씀해주세요."
+  }
+
+  // 시나리오 2 대화 로직: 여성, 임신, 4000, 1인, 해당사항 없음 (위기상황 판단)
+  const getScenario2Response = (messageCount: number, userInput: string): string => {
+    console.log('🔥 getScenario2Response 호출됨 - messageCount:', messageCount, 'userInput:', userInput)
+
+    // 1단계: 기본 정보 확인 및 상황 파악
+    if (messageCount === 1) {
+      return `안녕하세요. 입력하신 기본 정보를 확인했습니다.
+여성 / 임신 / 4000만원 / 1인 가구 / 해당사항 없음
+
+현재 임신 상태에서 혼자 계신 상황이군요. 지금 가장 걱정되거나 어려운 점이 무엇인지 말씀해주세요.`
+    }
+
+    // 2단계: 건강 상태 및 지원 체계 확인
+    if (messageCount === 2) {
+      return `현재 정기적인 산부인과 검진은 받고 계신가요? 그리고 주변에 도움을 요청할 수 있는 가족이나 지인이 있으신지요?`
+    }
+
+    // 3단계: 경제적 상황 및 일자리 확인
+    if (messageCount === 3) {
+      return `임신 중 일을 계속하고 계신가요? 출산 후 경제적 계획은 어떻게 되시나요?`
+    }
+
+    // 4단계: 산전 관리 및 대비 상황 확인
+    if (messageCount === 4) {
+      return `산전 관리는 어떻게 하고 계신가요? 출산 준비물이나 신생아 용품은 준비해두셨나요? 그리고 응급상황 시 도움을 요청할 수 있는 분이 계신가요?`
+    }
+
+    // 5단계: 심리적 상태 및 스트레스 수준 확인
+    if (messageCount === 5) {
+      return `혹시 요즘 불안하거나 우울한 기분이 들 때가 있으신가요? 임신 중 혼자 있는 시간이 많아서 외롭거나 힘든 상황이 있으셨나요? 밤에 잘 주무시고 식욕은 괜찮으신가요?`
+    }
+
+    // 6단계: 생활 패턴 및 안전 상황 확인
+    if (messageCount === 6) {
+      return `생활 패턴에 대해 좀 더 알려주세요. 하루 종일 어떻게 보내시는지요? 그리고 혹시 집에서 넘어지거나 다칠 것 같은 상황이 발생하면 즉시 도움을 받을 수 있으신가요?`
+    }
+
+    // 7단계: 사용자 응답 후 바로 위기 상황 판단부터 사연 작성 예시까지 한 번에 제공
+    if (messageCount === 7) {
+      console.log('🚨 7단계 실행됨! 위기 상황 판단 메시지')
+      return `말씀해주신 내용을 종합해보니 **위험한 상황으로 판단됩니다**.
+
+복지로 **복지위기알림 신고**를 도와드리겠습니다.
+
+복지로 위기신고 양식은 3가지 주요 항목을 작성해야 합니다:
+
+**1️⃣ 위기상황 유형**
+→ **'건강/의료'**를 선택하세요
+   (임신 관련 의료지원 필요)
+
+**2️⃣ 가구 유형**
+→ **'독거가구'**를 선택하세요
+   (1인 가구에 해당)
+
+**3️⃣ 사연 작성**
+**사연 작성 예시:**
+
+"저는 20대 한부모 가정의 임산부로 현재 임신 38주차이며 출산을 며칠 앞두고 있습니다.
+
+2025년 2월 10일에 '마포미래여성병원'에서 임신 확인을 받았으며, 출산 예정일은 2025년 10월 1일입니다.
+
+현재 검사비와 입원비만 200만 원 이상이 발생했고, 출산 후 추가 의료비가 예상되어 감당이 어려운 상황입니다.
+
+소득이 거의 없고 가족의 도움도 받을 수 없어 의료비 부담으로 출산 자체가 두려울 지경입니다.
+
+의료급여 임신·출산 진료비 지원과 긴급복지 위기 지원을 통해 안전한 출산이 가능하도록 도움을 요청드립니다."
+
+위와 같은 방식으로 구체적인 상황과 필요한 지원을 작성하시면 됩니다.`
+    }
+
+    // 8단계 이후: 복지로 사이트 연결
+    if (messageCount >= 8) {
+      console.log('⭐ 8단계 이후 실행됨! 신고 버튼 메시지')
+      return `✅ **복지위기상황 신고를 진행해주세요**
+
+위에서 안내드린 내용으로 양식을 작성하시면 됩니다:
+• 위기상황: **건강/의료**
+• 가구유형: **독거가구**
+• 사연: 위에서 제공한 예시 참고
+
+🔗 **바로 신고하러 가기**
+복지로 위기상황 신고 페이지로 연결됩니다.`
+    }
+
+    return "상담이 완료되었습니다. 추가 질문이 있으시면 언제든 말씀해주세요."
+  }
+
+  // 시나리오별 폴백 응답 생성
+  const generateScenarioFallback = (preData: PreConsultationData, messageCount: number, userInput: string): string => {
+    console.log('generateScenarioFallback 호출됨 - preData:', preData, 'messageCount:', messageCount)
+
+    const isScenario1 = preData.gender === 'male' && preData.lifeStage === 'senior' &&
+                       preData.income === '1200' && preData.householdSize === '1' &&
+                       preData.householdSituation === 'low_income'
+
+    const isScenario2 = preData.gender === 'female' && preData.lifeStage === 'pregnancy' &&
+                       preData.income === '4000' && preData.householdSize === '1' &&
+                       preData.householdSituation === 'general'
+
+    console.log('시나리오 판별 결과 - isScenario1:', isScenario1, 'isScenario2:', isScenario2)
+
+    if (isScenario1) {
+      // 시나리오 1: getScenario1Response 함수 호출 (남성, 노년, 저소득)
+      console.log('generateScenarioFallback - 시나리오 1 호출됨, messageCount:', messageCount, 'userInput:', userInput)
+      const response = getScenario1Response(messageCount, userInput)
+      console.log('getScenario1Response 응답:', response)
+      return response
+    } else if (isScenario2) {
+      // 시나리오 2: getScenario2Response 함수 호출 (6단계 대화 구조)
+      console.log('generateScenarioFallback - 시나리오 2 호출됨, messageCount:', messageCount, 'userInput:', userInput)
+      const response = getScenario2Response(messageCount, userInput)
+      console.log('getScenario2Response 응답:', response)
+      return response
+    } else {
+      // 일반적인 상담
+      console.log('일반 상담으로 처리됨')
+      return `죄송합니다. 일시적으로 상담 서비스에 문제가 발생했습니다.
 
 다음 방법으로 도움받으실 수 있습니다:
 📞 다산콜센터: 120 (무료)
 🏢 거주지 주민센터 방문 상담
 🌐 복지로 온라인: www.bokjiro.go.kr
 
-잠시 후 다시 시도해주세요.`,
-        sender: 'ai',
-        timestamp: new Date()
-      }
-
-      setMessages(prev => [...prev, errorMessage])
-    } finally {
-      setIsLoading(false)
+잠시 후 다시 시도해주세요.`
     }
   }
 
-  // AI 응답 생성
+  // AI 응답 생성 (사용되지 않음 - 제거 예정)
   const generateAIResponse = (userInput: string, turnCount: number): { content: string, shouldFinish: boolean } => {
     const input = userInput.toLowerCase()
+    console.log('generateAIResponse 호출됨, userInput:', userInput, 'turnCount:', turnCount)
+
+    // 시나리오 2 판별 (preData가 있는 경우)
+    if (preData) {
+      const isScenario2 = preData.gender === 'male' && preData.lifeStage === 'senior' &&
+                         preData.income === '1200' && preData.householdSize === '1' &&
+                         preData.householdSituation === 'low_income'
+
+      console.log('preData 확인됨, isScenario2:', isScenario2)
+
+      if (isScenario2) {
+        // 시나리오 2: getScenario2Response 함수 호출
+        console.log('generateAIResponse - 시나리오 2 호출, turnCount + 1:', turnCount + 1)
+        const response = getScenario2Response(turnCount + 1, userInput) // turnCount + 1 because initial message is turnCount 0
+        console.log('generateAIResponse - getScenario2Response 응답:', response)
+        return {
+          content: response,
+          shouldFinish: false
+        }
+      }
+    }
 
     // 위험 신호 감지
     const emergencyKeywords = ['자살', '죽고싶', '안전하지', '폭력', '위험', '응급', '급해', '힘들어서', '견딜수없']
@@ -530,6 +813,7 @@ export default function ConsultationPage() {
             onKeyPress={handleKeyPress}
             messagesEndRef={messagesEndRef}
             inputRef={inputRef}
+            generatePDF={generatePDF}
           />
         )}
 
@@ -568,99 +852,52 @@ function PreviewPhase({
           <CardTitle>📋 입력하신 정보</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             <div className="text-center p-3 bg-blue-50 rounded-lg">
               <div className="text-xs text-gray-600">성별</div>
               <div className="font-semibold text-sm">{preData.gender === 'male' ? '남성' : '여성'}</div>
             </div>
             <div className="text-center p-3 bg-green-50 rounded-lg">
-              <div className="text-xs text-gray-600">연령대</div>
+              <div className="text-xs text-gray-600">생애주기</div>
               <div className="font-semibold text-sm">
                 {{
-                  'child': '아동·청소년',
+                  'pregnancy': '출산-임신',
+                  'infant': '영유아',
+                  'child': '아동',
+                  'adolescent': '청소년',
                   'youth': '청년',
                   'middle': '중장년',
-                  'senior': '노인',
-                  'all': '연령 무관'
-                }[preData.age] || preData.age}
-              </div>
-            </div>
-            <div className="text-center p-3 bg-purple-50 rounded-lg">
-              <div className="text-xs text-gray-600">거주지역</div>
-              <div className="font-semibold text-sm">
-                {{
-                  'seoul': '서울',
-                  'busan': '부산',
-                  'daegu': '대구',
-                  'incheon': '인천',
-                  'gwangju': '광주',
-                  'daejeon': '대전',
-                  'ulsan': '울산',
-                  'sejong': '세종',
-                  'gyeonggi': '경기도',
-                  'gangwon': '강원도',
-                  'chungbuk': '충북',
-                  'chungnam': '충남',
-                  'jeonbuk': '전북',
-                  'jeonnam': '전남',
-                  'gyeongbuk': '경북',
-                  'gyeongnam': '경남',
-                  'jeju': '제주'
-                }[preData.region] || preData.region}
+                  'senior': '노년'
+                }[preData.lifeStage] || preData.lifeStage}
               </div>
             </div>
             <div className="text-center p-3 bg-orange-50 rounded-lg">
-              <div className="text-xs text-gray-600">소득 수준</div>
-              <div className="font-semibold text-sm">
-                {{
-                  'basic_recipient': '기초생활수급자',
-                  'near_poor': '차상위계층',
-                  'median_100': '중위소득 100%↓',
-                  'median_150': '중위소득 150%↓',
-                  'all': '소득 무관',
-                  'unknown': '기타'
-                }[preData.income] || preData.income}
-              </div>
+              <div className="text-xs text-gray-600">연소득</div>
+              <div className="font-semibold text-sm">{preData.income}만원</div>
             </div>
-          </div>
-
-          <div className="grid grid-cols-3 gap-3 mt-3">
-            <div className="text-center p-3 bg-pink-50 rounded-lg">
-              <div className="text-xs text-gray-600">대상유형</div>
-              <div className="font-semibold text-sm">
-                {{
-                  'general': '일반',
-                  'single_parent': '한부모',
-                  'disability': '장애인',
-                  'veteran': '국가유공자',
-                  'multi_child': '다자녀',
-                  'multicultural': '다문화'
-                }[preData.targetGroup] || preData.targetGroup}
-              </div>
-            </div>
-            <div className="text-center p-3 bg-cyan-50 rounded-lg">
+            <div className="text-center p-3 bg-purple-50 rounded-lg">
               <div className="text-xs text-gray-600">가구형태</div>
               <div className="font-semibold text-sm">
                 {{
-                  'single': '1인',
-                  'couple': '2인',
-                  'family_3': '3인',
-                  'family_4_plus': '4인+'
-                }[preData.household] || preData.household}
+                  '1': '1인',
+                  '2': '2인',
+                  '3': '3인',
+                  '4+': '4인+'
+                }[preData.householdSize] || preData.householdSize}
               </div>
             </div>
-            <div className="text-center p-3 bg-yellow-50 rounded-lg">
-              <div className="text-xs text-gray-600">주거상황</div>
+            <div className="text-center p-3 bg-pink-50 rounded-lg">
+              <div className="text-xs text-gray-600">가구상황</div>
               <div className="font-semibold text-sm">
                 {{
-                  'homeless': '무주택',
-                  'monthly_rent': '월세',
-                  'jeonse': '전세',
-                  'rental': '임대',
-                  'owned': '자가',
-                  'all': '무관',
-                  'unknown': '기타'
-                }[preData.housing] || preData.housing}
+                  'single_parent': '한부모·조손',
+                  'disability': '장애인',
+                  'veteran': '보훈대상자',
+                  'multi_child': '다자녀',
+                  'multicultural': '다문화·탈북민',
+                  'low_income': '저소득층',
+                  'general': '해당사항 없음'
+                }[preData.householdSituation] || preData.householdSituation}
               </div>
             </div>
           </div>
@@ -693,19 +930,26 @@ function PreviewPhase({
           ) : recommendedServices.length > 0 ? (
             <div className="grid md:grid-cols-2 gap-4 mb-6">
               {recommendedServices.slice(0, 4).map((service, index) => (
-                <div key={service.service_id} className="p-4 border rounded-lg hover:shadow-md transition-shadow">
+                <div key={service.service_id}
+                     className="p-4 border rounded-lg hover:shadow-md transition-shadow cursor-pointer"
+                     onClick={() => service.detailed_link && window.open(service.detailed_link, '_blank')}>
                   <h4 className="font-semibold text-gray-800 mb-2">{service.service_name}</h4>
                   <p className="text-sm text-gray-600 mb-2">{service.managing_agency || service.department}</p>
                   <p className="text-sm text-gray-700 line-clamp-2">{service.service_summary}</p>
-                  <div className="flex items-center gap-2 mt-2">
-                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                      {service.service_type === 'government' ? '중앙부처' :
-                       service.service_type === 'local' ? '지자체' : '민간'}
-                    </span>
-                    {service.category && (
-                      <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                        {service.category}
+                  <div className="flex items-center justify-between mt-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                        {service.service_type === 'government' ? '중앙부처' :
+                         service.service_type === 'local' ? '지자체' : '민간'}
                       </span>
+                      {service.category && (
+                        <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
+                          {service.category}
+                        </span>
+                      )}
+                    </div>
+                    {service.detailed_link && (
+                      <span className="text-xs text-blue-600 hover:underline">자세히 보기 →</span>
                     )}
                   </div>
                 </div>
@@ -734,7 +978,8 @@ function ChatPhase({
   onSendMessage,
   onKeyPress,
   messagesEndRef,
-  inputRef
+  inputRef,
+  generatePDF
 }: {
   messages: Message[]
   inputMessage: string
@@ -744,6 +989,7 @@ function ChatPhase({
   onKeyPress: (e: React.KeyboardEvent) => void
   messagesEndRef: React.RefObject<HTMLDivElement>
   inputRef: React.RefObject<HTMLInputElement>
+  generatePDF: () => void
 }) {
   return (
     <div className="max-w-4xl mx-auto">
@@ -768,6 +1014,34 @@ function ChatPhase({
                     : 'bg-gray-100 text-gray-800'
                 }`}>
                   <div className="whitespace-pre-wrap">{message.content}</div>
+
+                  {/* 복지위기신고 버튼 */}
+                  {message.hasWelfareButton && message.welfareUrl && (
+                    <div className="mt-4">
+                      <Button
+                        onClick={() => window.open(message.welfareUrl, '_blank')}
+                        className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition-all duration-200 flex items-center gap-2"
+                      >
+                        🚨 복지위기상황 알림 신청하기
+                      </Button>
+                      <p className="text-xs text-gray-600 mt-2">버튼을 클릭하면 복지로 사이트가 새 창에서 열립니다</p>
+                    </div>
+                  )}
+
+                  {/* PDF 다운로드 버튼 */}
+                  {message.hasPDFButton && (
+                    <div className="mt-4">
+                      <Button
+                        onClick={generatePDF}
+                        className="bg-gradient-to-r from-blue-500 to-green-600 hover:from-blue-600 hover:to-green-700 text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition-all duration-200 flex items-center gap-2"
+                      >
+                        <Download className="w-5 h-5" />
+                        신청서 다운로드 (PDF)
+                      </Button>
+                      <p className="text-xs text-gray-600 mt-2">버튼을 클릭하면 신청서 PDF 파일이 다운로드됩니다</p>
+                    </div>
+                  )}
+
                   <div className={`text-xs mt-2 ${
                     message.sender === 'user' ? 'text-blue-100' : 'text-gray-500'
                   }`}>
@@ -818,7 +1092,6 @@ function ResultsPhase({
   preData,
   riskAssessment,
   recommendedServices,
-  chatMessages
 }: {
   preData: PreConsultationData
   riskAssessment: RiskAssessment
@@ -911,11 +1184,15 @@ function ResultsPhase({
         </CardHeader>
         <CardContent>
           <div className="grid gap-4">
-            {recommendedServices.map((service, index) => (
-              <div key={service.service_id} className="p-6 border rounded-lg hover:shadow-md transition-shadow">
+            {recommendedServices.map((service) => (
+              <div key={service.service_id}
+                   className="p-6 border rounded-lg hover:shadow-md transition-shadow cursor-pointer"
+                   onClick={() => service.detailed_link && window.open(service.detailed_link, '_blank')}>
                 <div className="flex items-start justify-between mb-3">
                   <div>
-                    <h4 className="text-lg font-semibold text-gray-800 mb-1">{service.service_name}</h4>
+                    <h4 className="text-lg font-semibold text-gray-800 mb-1 hover:text-blue-600 transition-colors">
+                      {service.service_name}
+                    </h4>
                     <p className="text-sm text-gray-600">{service.managing_agency || service.department}</p>
                     <div className="flex items-center gap-2 mt-2">
                       <Badge variant={service.service_type === 'government' ? 'default' : 'secondary'}>
@@ -927,9 +1204,14 @@ function ResultsPhase({
                       )}
                     </div>
                   </div>
-                  {service.payment_method && (
-                    <Badge variant="outline">{service.payment_method}</Badge>
-                  )}
+                  <div className="flex flex-col gap-2">
+                    {service.payment_method && (
+                      <Badge variant="outline">{service.payment_method}</Badge>
+                    )}
+                    {service.detailed_link && (
+                      <span className="text-xs text-blue-600 hover:underline">자세히 보기 →</span>
+                    )}
+                  </div>
                 </div>
 
                 <p className="text-gray-700 mb-4">{service.service_summary}</p>
