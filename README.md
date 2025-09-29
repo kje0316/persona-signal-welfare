@@ -34,10 +34,10 @@
 | 구성 요소 | 사용 기술 |
 |---|---|
 | **Backend** | Python, FastAPI |
-| **Frontend** | React.js, Vue.js (예정) |
+| **Frontend** | React.js, Next.js |
 | **AI / ML** | PyTorch / TensorFlow (Generative Models), Scikit-learn |
 | **Core Engine** | LLM (GPT-4 or other), LangChain, Vector DB (Chroma, FAISS) |
-| **Database** | SQLite, PostgreSQL (예정) |
+| **Database** | SQLite, PostgreSQL |
 | **Version Control** | Git, GitHub |
 
 ---
